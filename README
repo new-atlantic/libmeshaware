@@ -1,0 +1,4 @@
+ libmeshaware
+--------------
+
+libmeshaware is a C++ library for writing "mesh aware" applications.
