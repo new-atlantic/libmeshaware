@@ -23,6 +23,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <CUnit/CUnit.h>
@@ -65,9 +66,47 @@ void check_module_loaded (void)
 		CU_ASSERT (batman_adv_kernel_mod_loaded() == 1);
 	}
 
-
+	if (fclose (fp) == EOF) CU_FAIL ("opening '/proc/modules' failed");
 }
 
+void check_module_version (void) {
+	batman_adv_version version = batman_adv_module_version();
+
+	if (!batman_adv_kernel_mod_loaded()) {
+		CU_ASSERT (version.year == 0);
+	} else {
+		FILE *fp;
+		char *line = NULL;
+		size_t len = 0;
+		ssize_t read;
+
+		char *year = malloc (5);
+		char *release = malloc (2);
+
+		fp = fopen ("/sys/module/batman_adv/version", "r");
+		if (!fp) CU_FAIL ("opening 'batman_adv/version' failed");
+
+		if ((read = getline (&line, &len, fp)) == -1)
+			CU_FAIL ("reading 'batman_adv/version' failed");
+
+		char *bug = malloc (read - 5);
+
+		memcpy (year, line, 4);
+		year[4] = '\0';
+		memcpy (release, line + 5, 1);
+		release[1] = '\0';
+		memcpy (bug, line + 7, read - 6);
+		bug[read - 6] = '\0';
+
+		CU_ASSERT (version.year == atoi (year));
+		CU_ASSERT (version.release_number == atoi (release));
+		CU_ASSERT (version.bugfix_counter == atoi (bug));
+
+		free (year);
+		free (release);
+		free (bug);
+	}
+}
 
 int main (void)
 {
@@ -87,6 +126,13 @@ int main (void)
 	if (!CU_add_test (pSuite,
 	                  "Test whether checking for mod batman_adv works",
 	                  check_module_loaded)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (!CU_add_test (pSuite,
+	                  "Test whether checking of batman_adv version works",
+	                  check_module_version)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

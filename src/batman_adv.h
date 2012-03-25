@@ -22,6 +22,4 @@
 
 // TODO: Do not compile if we are not using the Linux kernel.
 
-#define _ISOC99_SOURCE
-
 #endif

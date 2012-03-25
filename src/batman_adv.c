@@ -17,7 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _ISOC99_SOURCE
+#define _XOPEN_SOURCE 700
+
+#include <ctype.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "batman_adv.h"
@@ -49,7 +55,6 @@ typedef struct
  */
 
 static batman_adv_version available_batman_adv_versions[] = {
-	{0,    0, 0}, // dummy version: something is wrong or not implemented
 	{2011, 4, 0}
 };
 
@@ -65,11 +70,57 @@ static int batman_adv_kernel_mod_loaded (void)
 	}
 }
 
-// TODO: batman_adv_version: fp = fopen ("/sys/module/batman_adv/version");
-
 static batman_adv_version batman_adv_module_version (void)
 {
-	batman_adv_version version = {0, 0, 0};
+	batman_adv_version version;
+	batman_adv_version dummy_version = {0, 0, 0};
+
+	FILE *fp;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+
+	fp = fopen ("/sys/module/batman_adv/version", "r");
+
+	if (!fp) return dummy_version;
+
+	if ((read = getdelim (&line, &len, '.', fp)) == -1) {
+		return dummy_version;
+	} else if (read == 5) {
+		for (int i = 0; i < 4; i++) {
+			if (!isdigit (line[i])) return dummy_version;
+		}
+		line[4] = '\0';
+		version.year = atoi (line);
+	} else {
+		return dummy_version;
+	}
+
+	if ((read = getdelim (&line, &len, '.', fp)) == -1) {
+		return dummy_version;
+	} else if (read == 2) {
+		if (!isdigit (line[0])) return dummy_version;
+		line[1] = '\0';
+		version.release_number = atoi (line);
+	} else {
+		return dummy_version;
+	}
+
+	if ((read = getdelim (&line, &len, '.', fp)) == -1) {
+		return dummy_version;
+	} else if (read >= 1) {
+		for (int i = 0; i < read - 1; i++) {
+			if (!isdigit (line[i])) return dummy_version;
+		}
+		version.bugfix_counter = atoi (line);
+	} else {
+		return dummy_version;
+	}
+
+	// clean up;
+	if (line) free (line);
+	if (fclose (fp) == EOF) return dummy_version;
+
 	return version;
 }
 
