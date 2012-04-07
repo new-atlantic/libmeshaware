@@ -21,6 +21,6 @@
 #define MESHAWARE_BATMAN_ADV_H
 #ifdef linux
 
-#endif linux
+#endif
 #endif
 

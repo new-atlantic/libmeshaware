@@ -126,5 +126,5 @@ static batman_adv_version batman_adv_module_version (void)
 	return version;
 }
 
-#endif linux
+#endif
 
