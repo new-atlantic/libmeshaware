@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef linux
+
 #define _ISOC99_SOURCE
 #define _XOPEN_SOURCE 700
 
@@ -123,4 +125,6 @@ static batman_adv_version batman_adv_module_version (void)
 
 	return version;
 }
+
+#endif linux
 
