@@ -20,7 +20,7 @@
 #ifndef MESHAWARE_BATMAN_ADV_H
 #define MESHAWARE_BATMAN_ADV_H
 #ifdef linux
-// TODO: Do not compile if we are not using the Linux kernel.
 
 #endif linux
 #endif
+
