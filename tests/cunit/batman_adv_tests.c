@@ -36,7 +36,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 
-#include "../../src/batman_adv.h"
 #include "../../src/batman_adv.c"
 
 #define KERNEL_MODULE_NAME "batman_adv"

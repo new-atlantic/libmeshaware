@@ -21,5 +21,5 @@ install(DIRECTORY src/ DESTINATION include/meshaware
 enable_testing ()
 find_library (CUNIT_LIBRARY cunit)
 add_executable (cunit_batman_adv tests/cunit/batman_adv_tests.c)
-target_link_libraries (cunit_batman_adv ${CUNIT_LIBRARY} meshaware)
+target_link_libraries (cunit_batman_adv ${CUNIT_LIBRARY})
 add_test (cunit_batman_adv_test cunit_batman_adv)
