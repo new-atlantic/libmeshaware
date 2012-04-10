@@ -22,31 +22,31 @@
 #ifdef __linux
 
 /**
- * @brief Test whether the module is loaded.
+ * @brief Test whether the batman_adv kernel module is loaded.
  *
- * Should not work for releases preceding 2010.0.0
+ * Should not work for releases preceding 2010.0.0.
  *
  * @retval  1 The module is loaded.
  * @retval  0 The module is not loaded.
  * @retval -1 Error trying to determine if the module is loaded.
  **/
 
-int __attribute__ ((visibility ("internal")))
+extern int __attribute__ ((visibility ("internal")))
 batman_adv_kernel_mod_loaded (void);
 
 /**
- * @brief Test whether the module version is supported.
+ * @brief Test whether the batman_adv kernel module version is supported.
  *
  * @retval  1 The version is (at least partly) supported.
  * @retval  0 The module is (likely) not supported.
  * @retval -1 Module not loaded or version not recognized.
  **/
 
-int __attribute__ ((visibility ("internal")))
+extern int __attribute__ ((visibility ("internal")))
 batman_adv_kernel_mod_version_supported (void);
 
 /**
- * @brief Get potential next hops from local node.
+ * @brief Get potential next hops in bat mesh.
  *
  * @param[in,out] addresses Pointer to an array of addresses. The funtion will
  *                          call malloc for a NULL-pointer or reallocate the
@@ -58,9 +58,9 @@ batman_adv_kernel_mod_version_supported (void);
  *
  **/
 
-int __attribute__ ((visibility ("internal")))
+extern int __attribute__ ((visibility ("internal")))
 batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses */);
 
-#endif
-#endif
+#endif /* __linux */
+#endif /* MESHAWARE_BATMAN_ADV_H */
 
