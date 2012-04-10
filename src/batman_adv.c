@@ -17,10 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef linux
+#ifdef __linux
 
-#define _ISOC99_SOURCE
+#ifndef _ISOC99_SOURCE
+#define _ISOC99_SOURCE 1
+#endif
+
+#ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
+#endif
 
 #include <ctype.h>
 #include <errno.h>
@@ -41,8 +46,10 @@ typedef struct
 	unsigned int bugfix_counter;
 } batman_adv_version;
 
-/* Releases to date. Last updated 2012-03-25.
- *
+/* batman-adv releases to date. Last updated 2012-03-25.
+ * Versioning scheme description:
+ * http://www.open-mesh.org/wiki/open-mesh/2010-06-19-batman-adv-2010-0-0-release
+ * 
  * RELEASE  | DATE       | STATUS
  * ---------|------------|-------
  * 2010.0.0 | 2010-06-19 | ?
@@ -56,22 +63,26 @@ typedef struct
  * 2012.0.0 | 2012-02-09 | ?
  */
 
+/* Array of versions with at least nominal support */
 static batman_adv_version available_batman_adv_versions[] = {
 	{2011, 4, 0}
 };
 
-static int batman_adv_kernel_mod_loaded (void)
+int batman_adv_kernel_mod_loaded (void)
 {
+	// Checking the sys filesystem should work since 2010.0.0, not before.
 	if (access ("/sys/module/batman_adv/version", F_OK) != -1) {
 		return 1;
 	} else {
 		if (errno == ENOENT)
 			return 0;
 		else
+			// TODO: Do the other errors apply to F_OK?
 			return -1;
 	}
 }
 
+// TODO: Return int an pass batman_adv_version as pointer? -> No need for dummy.
 static batman_adv_version batman_adv_module_version (void)
 {
 	batman_adv_version version;

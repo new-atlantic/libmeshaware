@@ -17,8 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _ISOC99_SOURCE
+#ifdef __linux
+
+#ifndef _ISOC99_SOURCE
+#define _ISOC99_SOURCE 1
+#endif
+
+#ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
+#endif
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -29,6 +36,7 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 
+#include "../../src/batman_adv.h"
 #include "../../src/batman_adv.c"
 
 #define KERNEL_MODULE_NAME "batman_adv"
@@ -148,4 +156,6 @@ int main (void)
 		return EXIT_SUCCESS;
 	}
 }
+
+#endif
 
