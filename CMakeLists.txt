@@ -8,8 +8,9 @@ set (meshaware_VERSION
 
 add_library (meshaware SHARED src/batman_adv.c)
 
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wextra -fpic")
 if (CMAKE_COMPILER_IS_GNUCC)
-	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wextra -std=c99 -fpic")
+	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif (CMAKE_COMPILER_IS_GNUCC)
 
 install (TARGETS meshaware
