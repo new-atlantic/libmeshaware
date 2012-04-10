@@ -15,8 +15,8 @@ endif (CMAKE_COMPILER_IS_GNUCC)
 
 install (TARGETS meshaware
          LIBRARY DESTINATION lib)
-install(DIRECTORY src/ DESTINATION include/meshaware
-          FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY src/ DESTINATION include/
+          FILES_MATCHING PATTERN "meshaware.h")
 
 enable_testing ()
 find_library (CUNIT_LIBRARY cunit)
