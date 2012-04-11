@@ -46,6 +46,14 @@ typedef union maw_address {
 } maw_address;
 
 /**
+ * @brief Returns the mesh protocol to be used.
+ *
+ * @returns Pointer to mesh protocol.
+ **/
+
+int maw_determine_mesh_protocol(maw_mesh_protocol*);
+
+/**
  * @brief Returns a the number and addresses of neighbouring nodes.
  *
  *
