@@ -21,6 +21,9 @@ install(DIRECTORY src/ DESTINATION include/
 enable_testing ()
 find_library (CUNIT_LIBRARY cunit)
 set (test_BIN_DIR "tests/bin/")
-add_executable (${test_BIN_DIR}cunit_batman_adv tests/cunit/batman_adv_tests.c)
-target_link_libraries (${test_BIN_DIR}cunit_batman_adv ${CUNIT_LIBRARY})
-add_test (cunit_batman_adv_test ${test_BIN_DIR}cunit_batman_adv)
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	add_executable (${test_BIN_DIR}cunit_batman_adv tests/cunit/batman_adv_tests.c)
+	target_link_libraries (${test_BIN_DIR}cunit_batman_adv ${CUNIT_LIBRARY})
+	add_test (cunit_batman_adv_test ${test_BIN_DIR}cunit_batman_adv)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
