@@ -46,9 +46,9 @@ typedef union maw_address {
 } maw_address;
 
 /**
- * @brief Returns the mesh protocol to be used.
+ * @brief Sets the protocol to the used.
  *
- * @returns Pointer to mesh protocol.
+ * @returns Success or failure.
  **/
 
 int maw_determine_mesh_protocol(maw_mesh_protocol*);
