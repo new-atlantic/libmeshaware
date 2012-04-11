@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Torsti Schulz
+ * Copyright 2012 Torsti Schulz, Timo Sand
  *
  * This file is part of the meshaware library.
  *
@@ -76,3 +76,4 @@ maw_potential_next_hops (maw_mesh_protocol const *protocol,
                          maw_address             *addresses);
 
 #endif /* MESHAWARE_H */
+
