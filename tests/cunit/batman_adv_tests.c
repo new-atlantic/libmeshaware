@@ -77,10 +77,11 @@ void check_module_loaded (void)
 }
 
 void check_module_version (void) {
-	batman_adv_version version = batman_adv_module_version();
+	batman_adv_version *version = malloc (sizeof (batman_adv_version));
+	int version_ret_val = batman_adv_module_version(version);
 
 	if (!batman_adv_kernel_mod_loaded()) {
-		CU_ASSERT (version.year == 0);
+		CU_ASSERT (version_ret_val == -1);
 	} else {
 		FILE *fp;
 		char *line = NULL;
@@ -105,13 +106,14 @@ void check_module_version (void) {
 		memcpy (bug, line + 7, read - 6);
 		bug[read - 6] = '\0';
 
-		CU_ASSERT (version.year == atoi (year));
-		CU_ASSERT (version.release_number == atoi (release));
-		CU_ASSERT (version.bugfix_counter == atoi (bug));
+		CU_ASSERT (version->year == atoi (year));
+		CU_ASSERT (version->release_number == atoi (release));
+		CU_ASSERT (version->bugfix_counter == atoi (bug));
 
 		free (year);
 		free (release);
 		free (bug);
+		free (version);
 	}
 }
 

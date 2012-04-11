@@ -18,8 +18,19 @@
  */
 
 #ifndef MESHAWARE_BATMAN_ADV_H
-#define MESHAWARE_BATMAN_ADV_H
+#define MESHAWARE_BATMAN_ADV_H 1
 #ifdef __linux
+
+/* We only support the "new" version numbering introduced with 2010.0.0. We
+ * don't see much reason to even trying to support older versions than that.
+ */
+
+typedef struct
+{
+	unsigned int year;
+	unsigned int release_number;
+	unsigned int bugfix_counter;
+} batman_adv_version;
 
 /**
  * @brief Test whether the batman_adv kernel module is loaded.
@@ -60,6 +71,17 @@ batman_adv_kernel_mod_version_supported (void);
 
 extern int __attribute__ ((visibility ("internal")))
 batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses */);
+
+/**
+ * @brief Check the version of batman_adv.
+ *
+ * @param[in,out] version Pointer to struct to hold version information.
+ *
+ * @retval -1 Version could not be determined.
+ **/
+
+extern __attribute__ ((visibility ("internal")))
+int batman_adv_module_version (batman_adv_version *version);
 
 #endif /* __linux */
 #endif /* MESHAWARE_BATMAN_ADV_H */
