@@ -6,7 +6,7 @@ set (meshaware_PATCH_VERSION 0)
 set (meshaware_VERSION
    ${meshaware_MAJOR_VERSION}.${meshaware_MINOR_VERSION}.${meshaware_PATCH_VERSION})
 
-add_library (meshaware SHARED src/batman_adv.c)
+add_library (meshaware SHARED src/batman_adv.c src/meshaware.c)
 
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wextra -fpic")
 if (CMAKE_COMPILER_IS_GNUCC)
@@ -20,7 +20,12 @@ install(DIRECTORY src/ DESTINATION include/
 
 enable_testing ()
 find_library (CUNIT_LIBRARY cunit)
+
 set (test_BIN_DIR "tests/bin/")
+add_executable (${test_BIN_DIR}cunit_meshaware tests/cunit/meshaware_tests.c)
+target_link_libraries (${test_BIN_DIR}cunit_meshaware ${CUNIT_LIBRARY} meshaware)
+add_test (cunit_meshaware_test ${test_BIN_DIR}cunit_meshaware)
+
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	add_executable (${test_BIN_DIR}cunit_batman_adv tests/cunit/batman_adv_tests.c)
 	target_link_libraries (${test_BIN_DIR}cunit_batman_adv ${CUNIT_LIBRARY})
