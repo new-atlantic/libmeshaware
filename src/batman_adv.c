@@ -35,21 +35,10 @@
 
 #include "batman_adv.h"
 
-/* We only support the "new" version numbering introduced with 2010.0.0. We
- * don't see much reason to even trying to support older versions than that.
- */
-
-typedef struct
-{
-	unsigned int year;
-	unsigned int release_number;
-	unsigned int bugfix_counter;
-} batman_adv_version;
-
 /* batman-adv releases to date. Last updated 2012-03-25.
  * Versioning scheme description:
  * http://www.open-mesh.org/wiki/open-mesh/2010-06-19-batman-adv-2010-0-0-release
- * 
+ *
  * RELEASE  | DATE       | STATUS
  * ---------|------------|-------
  * 2010.0.0 | 2010-06-19 | ?
@@ -82,12 +71,8 @@ int batman_adv_kernel_mod_loaded (void)
 	}
 }
 
-// TODO: Return int an pass batman_adv_version as pointer? -> No need for dummy.
-static batman_adv_version batman_adv_module_version (void)
+int batman_adv_module_version (batman_adv_version *version)
 {
-	batman_adv_version version;
-	batman_adv_version dummy_version = {0, 0, 0};
-
 	FILE *fp;
 	char *line = NULL;
 	size_t len = 0;
@@ -95,46 +80,46 @@ static batman_adv_version batman_adv_module_version (void)
 
 	fp = fopen ("/sys/module/batman_adv/version", "r");
 
-	if (!fp) return dummy_version;
+	if (!fp) return -1;
 
 	if ((read = getdelim (&line, &len, '.', fp)) == -1) {
-		return dummy_version;
+		return -1;
 	} else if (read == 5) {
 		for (int i = 0; i < 4; i++) {
-			if (!isdigit (line[i])) return dummy_version;
+			if (!isdigit (line[i])) return -1;
 		}
 		line[4] = '\0';
-		version.year = atoi (line);
+		version->year = atoi (line);
 	} else {
-		return dummy_version;
+		return -1;
 	}
 
 	if ((read = getdelim (&line, &len, '.', fp)) == -1) {
-		return dummy_version;
+		return -1;
 	} else if (read == 2) {
-		if (!isdigit (line[0])) return dummy_version;
+		if (!isdigit (line[0])) return -1;
 		line[1] = '\0';
-		version.release_number = atoi (line);
+		version->release_number = atoi (line);
 	} else {
-		return dummy_version;
+		return -1;
 	}
 
 	if ((read = getdelim (&line, &len, '.', fp)) == -1) {
-		return dummy_version;
+		return -1;
 	} else if (read >= 1) {
 		for (int i = 0; i < read - 1; i++) {
-			if (!isdigit (line[i])) return dummy_version;
+			if (!isdigit (line[i])) return -1;
 		}
-		version.bugfix_counter = atoi (line);
+		version->bugfix_counter = atoi (line);
 	} else {
-		return dummy_version;
+		return -1;
 	}
 
 	// clean up;
 	if (line) free (line);
-	if (fclose (fp) == EOF) return dummy_version;
+	if (fclose (fp) == EOF) return -1;
 
-	return version;
+	return 0;
 }
 
 #endif
