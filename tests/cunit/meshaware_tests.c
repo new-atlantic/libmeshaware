@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Timo Sand
+ * Copyright 2012 Timo Sand, Torsti Schulz
  *
  * This file is part of the meshaware library.
  *
@@ -17,17 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 
-#include <stdlib.h>
-
 #include "../../src/meshaware.h"
+#include "../../src/batman_adv.c"
 
 void check_that_batman_adv_is_loaded(void) {
 	maw_mesh_protocol *returned_protocol = malloc(sizeof(maw_mesh_protocol));
-	maw_determine_mesh_protocol(returned_protocol);
-	CU_ASSERT (returned_protocol->name == batman_adv)
+	if (!batman_adv_kernel_mod_loaded()
+	    && !maw_determine_mesh_protocol(returned_protocol)) {
+		CU_ASSERT (returned_protocol->name == batman_adv)
+	}
+	free(returned_protocol);
 }
 
 int main (void) {
