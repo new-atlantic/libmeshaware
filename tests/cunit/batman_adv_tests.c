@@ -68,9 +68,9 @@ void check_module_loaded (void)
 	line = NULL;
 
 	if (!module_loaded) {
-		CU_ASSERT (batman_adv_kernel_mod_loaded() == 0);
-	} else {
 		CU_ASSERT (batman_adv_kernel_mod_loaded() == 1);
+	} else {
+		CU_ASSERT (batman_adv_kernel_mod_loaded() == 0);
 	}
 
 	if (fclose (fp) == EOF) CU_FAIL ("opening '/proc/modules' failed");
@@ -80,7 +80,7 @@ void check_module_version (void) {
 	batman_adv_version *version = malloc (sizeof (batman_adv_version));
 	int version_ret_val = batman_adv_module_version(version);
 
-	if (!batman_adv_kernel_mod_loaded()) {
+	if (batman_adv_kernel_mod_loaded()) {
 		CU_ASSERT (version_ret_val == -1);
 	} else {
 		FILE *fp;

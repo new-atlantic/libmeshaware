@@ -37,8 +37,8 @@ typedef struct
  *
  * Should not work for releases preceding 2010.0.0.
  *
- * @retval  1 The module is loaded.
- * @retval  0 The module is not loaded.
+ * @retval  0 The module is loaded.
+ * @retval  1 The module is not loaded.
  * @retval -1 Error trying to determine if the module is loaded.
  **/
 
@@ -48,8 +48,8 @@ batman_adv_kernel_mod_loaded (void);
 /**
  * @brief Test whether the batman_adv kernel module version is supported.
  *
- * @retval  1 The version is (at least partly) supported.
- * @retval  0 The module is (likely) not supported.
+ * @retval  0 The version is (at least partly) supported.
+ * @retval  1 The module is (likely) not supported.
  * @retval -1 Module not loaded or version not recognized.
  **/
 

@@ -61,10 +61,10 @@ int batman_adv_kernel_mod_loaded (void)
 {
 	// Checking the sys filesystem should work since 2010.0.0, not before.
 	if (access ("/sys/module/batman_adv/version", F_OK) != -1) {
-		return 1;
+		return 0;
 	} else {
 		if (errno == ENOENT)
-			return 0;
+			return 1;
 		else
 			// TODO: Do the other errors apply to F_OK?
 			return -1;
