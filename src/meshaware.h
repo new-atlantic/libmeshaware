@@ -22,6 +22,11 @@
 
 #include <stdint.h>
 
+// Error codes.
+#define NO_MESH_PROTOCOL_AVAILABLE 101
+
+
+
 typedef enum maw_protocol_name {
 	batman_adv,
 } maw_protocol_name;
