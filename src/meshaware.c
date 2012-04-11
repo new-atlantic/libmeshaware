@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/// @file meshaware.c
+
 #include <stdlib.h>
 
 #include "meshaware.h"

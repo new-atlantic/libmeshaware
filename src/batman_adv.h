@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/// @file batman_adv.h
+
 #ifndef MESHAWARE_BATMAN_ADV_H
 #define MESHAWARE_BATMAN_ADV_H 1
 #ifdef __linux
@@ -42,8 +44,8 @@ typedef struct
  * @retval -1 Error trying to determine if the module is loaded.
  **/
 
-extern int __attribute__ ((visibility ("internal")))
-batman_adv_kernel_mod_loaded (void);
+int batman_adv_kernel_mod_loaded (void)
+    __attribute__ ((visibility ("internal")));
 
 /**
  * @brief Test whether the batman_adv kernel module version is supported.
@@ -53,8 +55,8 @@ batman_adv_kernel_mod_loaded (void);
  * @retval -1 Module not loaded or version not recognized.
  **/
 
-extern int __attribute__ ((visibility ("internal")))
-batman_adv_kernel_mod_version_supported (void);
+int batman_adv_kernel_mod_version_supported (void)
+    __attribute__ ((visibility ("internal")));
 
 /**
  * @brief Get potential next hops in bat mesh.
@@ -69,8 +71,8 @@ batman_adv_kernel_mod_version_supported (void);
  *
  **/
 
-extern int __attribute__ ((visibility ("internal")))
-batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses */);
+int batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses */)
+    __attribute__ ((visibility ("internal")));
 
 /**
  * @brief Check the version of batman_adv.
@@ -80,8 +82,8 @@ batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses */);
  * @retval -1 Version could not be determined.
  **/
 
-extern __attribute__ ((visibility ("internal")))
-int batman_adv_module_version (batman_adv_version *version);
+int batman_adv_module_version (batman_adv_version *version)
+    __attribute__ ((visibility ("internal")));
 
 #endif /* __linux */
 #endif /* MESHAWARE_BATMAN_ADV_H */

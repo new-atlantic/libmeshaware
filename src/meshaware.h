@@ -17,15 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/// @file meshaware.h
+
 #ifndef MESHAWARE_H
 #define MESHAWARE_H 1
 
 #include <stdint.h>
 
-// Error codes.
+/** @defgroup error_codes Error codes
+ * Error codes that functions return.
+ * @{
+ */
+
+///@brief Could not find a mesh protocol.
 #define NO_MESH_PROTOCOL_AVAILABLE 101
 
-
+/** @} error_codes */
 
 typedef enum maw_protocol_name {
 	batman_adv,
@@ -75,10 +82,9 @@ int maw_determine_mesh_protocol(maw_mesh_protocol*);
  *
  **/
 
-extern int __attribute__ ((visibility ("default")))
-maw_potential_next_hops (maw_mesh_protocol const *protocol,
-                         maw_address_type        *addr_type,
-                         maw_address             *addresses);
+int maw_potential_next_hops (maw_mesh_protocol const *protocol,
+                             maw_address_type        *addr_type,
+                             maw_address             *addresses);
 
 #endif /* MESHAWARE_H */
 
