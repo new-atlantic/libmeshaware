@@ -78,7 +78,7 @@ void check_module_loaded (void)
 
 void check_module_version (void) {
 	batman_adv_version *version = malloc (sizeof (batman_adv_version));
-	int version_ret_val = batman_adv_module_version(version);
+	int version_ret_val = batman_adv_module_version (version);
 
 	if (batman_adv_kernel_mod_loaded()) {
 		CU_ASSERT (version_ret_val == -1);
@@ -114,6 +114,23 @@ void check_module_version (void) {
 		free (release);
 		free (bug);
 		free (version);
+
+		len = 0;
+		char *version_string = NULL;
+		
+		if (batman_adv_module_version_string (version_string)) {
+			CU_FAIL ("getting the version string failed");
+		}
+
+		fp = fopen ("/sys/module/batman_adv/version", "r");
+		if (!fp) CU_FAIL ("opening 'batman_adv/version' failed");
+
+		if ((read = getline (&line, &len, fp)) == -1)
+			CU_FAIL ("reading 'batman_adv/version' failed");
+
+		CU_ASSERT (strncmp(version_string, line, read - 1) == 0);
+		
+		free (line);
 	}
 }
 

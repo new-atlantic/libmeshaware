@@ -37,6 +37,17 @@
 
 #include "batman_adv.h"
 
+/* We only support the "new" version numbering introduced with 2010.0.0. We
+ * don't see much reason to even trying to support older versions than that.
+ */
+
+typedef struct
+{
+	unsigned int year;
+	unsigned int release_number;
+	unsigned int bugfix_counter;
+} batman_adv_version;
+
 /* batman-adv releases to date. Last updated 2012-03-25.
  * Versioning scheme description:
  * http://www.open-mesh.org/wiki/open-mesh/2010-06-19-batman-adv-2010-0-0-release
@@ -73,7 +84,7 @@ int batman_adv_kernel_mod_loaded (void)
 	}
 }
 
-int batman_adv_module_version (batman_adv_version *version)
+static int batman_adv_module_version (batman_adv_version *version)
 {
 	FILE *fp;
 	char *line = NULL;
@@ -121,6 +132,59 @@ int batman_adv_module_version (batman_adv_version *version)
 	if (line) free (line);
 	if (fclose (fp) == EOF) return -1;
 
+	return 0;
+}
+
+int batman_adv_module_version_string (char *version)
+{
+	batman_adv_version module_version;
+	
+	if (batman_adv_module_version (&module_version)) {
+		// TODO: Replace with ERR_CODE.
+		return -1;
+	}
+	
+	int release_len = 0;
+	int bugfix_len = 0;
+	int i = module_version.release_number;
+	int j = module_version.bugfix_counter;
+	if (module_version.release_number) {
+		while (i) {
+			i /= 10;
+			release_len++;
+		}
+	} else {
+		release_len = 1;
+	}
+	if (module_version.bugfix_counter) {
+		while (j) {
+			j /= 10;
+			bugfix_len++;
+		}
+	} else {
+		bugfix_len = 1;
+	}
+	int version_len = 4 + 1 + release_len + 1 + bugfix_len;
+
+	char *tmp_ptr = realloc(version, version_len + 1);
+	if (tmp_ptr) {
+		version = tmp_ptr;
+		tmp_ptr = NULL;
+	} else {
+		// TODO: Replace with ERR_CODE.
+		return 1;
+	}
+
+	// TODO: Check return values for snprintf.
+	snprintf (version, 5, "%d", module_version.year);
+	snprintf (version + 4,
+	          release_len + 2,
+	          ".%d",
+	          module_version.release_number);
+	snprintf (version + 4 + 1 + release_len,
+	          bugfix_len + 2,
+	          ".%d",
+	          module_version.bugfix_counter);
 	return 0;
 }
 
