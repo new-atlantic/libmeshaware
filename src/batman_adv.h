@@ -71,7 +71,7 @@ int batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses 
  * @retval -1 Version could not be determined.
  **/
 
-int batman_adv_module_version_string (char *version)
+int batman_adv_module_version_string (char **version)
     __attribute__ ((visibility ("internal")));
 
 #endif /* __linux */

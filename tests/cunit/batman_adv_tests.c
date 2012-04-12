@@ -118,7 +118,7 @@ void check_module_version (void) {
 		len = 0;
 		char *version_string = NULL;
 		
-		if (batman_adv_module_version_string (version_string)) {
+		if (batman_adv_module_version_string (&version_string)) {
 			CU_FAIL ("getting the version string failed");
 		}
 
