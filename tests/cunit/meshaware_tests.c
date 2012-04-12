@@ -17,7 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
+
 #include <stdlib.h>
+#include <string.h>
 
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
@@ -29,7 +34,20 @@ void check_that_batman_adv_is_loaded(void) {
 	maw_mesh_protocol *returned_protocol = malloc(sizeof(maw_mesh_protocol));
 	if (!batman_adv_kernel_mod_loaded()
 	    && !maw_determine_mesh_protocol(returned_protocol)) {
-		CU_ASSERT (returned_protocol->name == batman_adv)
+	    	FILE *fp;
+		char *line = NULL;
+		size_t len = 0;
+		ssize_t read;
+
+		fp = fopen ("/sys/module/batman_adv/version", "r");
+		if (!fp) CU_FAIL ("opening 'batman_adv/version' failed");
+
+		if ((read = getline (&line, &len, fp)) == -1)
+			CU_FAIL ("reading 'batman_adv/version' failed");
+
+		CU_ASSERT (returned_protocol->name == batman_adv);
+		CU_ASSERT (strncmp(returned_protocol->version, line, read - 1) == 0);
+
 	}
 	free(returned_protocol);
 }
