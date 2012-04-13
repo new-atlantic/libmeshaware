@@ -27,6 +27,7 @@
 
 int maw_determine_mesh_protocol(maw_mesh_protocol *protocol) {
 	if (! batman_adv_kernel_mod_loaded()) {
+		// TODO: Need to allocate with malloc, not automagically.
 		protocol->name = batman_adv;
 		if (! batman_adv_module_version_string (&(protocol->version))) {
 			// TODO: Docs must remind to free() protocol.version

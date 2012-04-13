@@ -34,7 +34,7 @@ void check_that_batman_adv_is_loaded(void) {
 	maw_mesh_protocol *returned_protocol = malloc(sizeof(maw_mesh_protocol));
 	if (!batman_adv_kernel_mod_loaded()
 	    && !maw_determine_mesh_protocol(returned_protocol)) {
-	    	FILE *fp;
+		FILE *fp;
 		char *line = NULL;
 		size_t len = 0;
 		ssize_t read;
@@ -49,6 +49,7 @@ void check_that_batman_adv_is_loaded(void) {
 		CU_ASSERT (strncmp(returned_protocol->version, line, read - 1) == 0);
 
 	}
+	free(returned_protocol->version);
 	free(returned_protocol);
 }
 
