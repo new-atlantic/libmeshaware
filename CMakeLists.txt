@@ -4,7 +4,8 @@ set (meshaware_VERSION_MAJOR 0)
 set (meshaware_VERSION_MINOR 0)
 set (meshaware_PATCH_VERSION 0)
 set (meshaware_VERSION
-   ${meshaware_MAJOR_VERSION}.${meshaware_MINOR_VERSION}.${meshaware_PATCH_VERSION})
+   ${meshaware_VERSION_MAJOR}.${meshaware_VERSION_MINOR}.${meshaware_PATCH_VERSION})
+add_definitions ('-DMESHAWARE_VERSION="${meshaware_VERSION}"')
 
 add_library (meshaware SHARED src/batman_adv.c src/meshaware.c)
 

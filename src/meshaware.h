@@ -34,6 +34,8 @@
 
 /** @} error_codes */
 
+char* meshaware_version = MESHAWARE_VERSION;
+
 typedef enum maw_protocol_name {
 	none,
 	batman_adv,
