@@ -39,7 +39,7 @@ void check_that_batman_adv_is_loaded(void) {
 		size_t len = 0;
 		ssize_t read;
 
-		fp = fopen ("/sys/module/batman_adv/version", "r");
+		fp = fopen (BATMAN_ADV_VERSION_PATH, "r");
 		if (!fp) CU_FAIL ("opening 'batman_adv/version' failed");
 
 		if ((read = getline (&line, &len, fp)) == -1)

@@ -23,6 +23,8 @@
 #define MESHAWARE_BATMAN_ADV_H 1
 #ifdef __linux
 
+#define BATMAN_ADV_VERSION_PATH "/sys/module/batman_adv/version"
+
 /**
  * @brief Test whether the batman_adv kernel module is loaded.
  *

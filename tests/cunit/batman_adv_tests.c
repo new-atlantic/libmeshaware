@@ -91,7 +91,7 @@ void check_module_version (void) {
 		char *year = malloc (5);
 		char *release = malloc (2);
 
-		fp = fopen ("/sys/module/batman_adv/version", "r");
+		fp = fopen (BATMAN_ADV_VERSION_PATH, "r");
 		if (!fp) CU_FAIL ("opening 'batman_adv/version' failed");
 
 		if ((read = getline (&line, &len, fp)) == -1)
@@ -122,7 +122,7 @@ void check_module_version (void) {
 			CU_FAIL ("getting the version string failed");
 		}
 
-		fp = fopen ("/sys/module/batman_adv/version", "r");
+		fp = fopen (BATMAN_ADV_VERSION_PATH, "r");
 		if (!fp) CU_FAIL ("opening 'batman_adv/version' failed");
 
 		if ((read = getline (&line, &len, fp)) == -1)

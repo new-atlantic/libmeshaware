@@ -73,7 +73,7 @@ static batman_adv_version available_batman_adv_versions[] = {
 int batman_adv_kernel_mod_loaded (void)
 {
 	// Checking the sys filesystem should work since 2010.0.0, not before.
-	if (access ("/sys/module/batman_adv/version", F_OK) != -1) {
+	if (access (BATMAN_ADV_VERSION_PATH, F_OK) != -1) {
 		return 0;
 	} else {
 		if (errno == ENOENT)
@@ -91,7 +91,7 @@ static int batman_adv_module_version (batman_adv_version *version)
 	size_t len = 0;
 	ssize_t read;
 
-	fp = fopen ("/sys/module/batman_adv/version", "r");
+	fp = fopen (BATMAN_ADV_VERSION_PATH, "r");
 
 	if (!fp) return -1;
 
