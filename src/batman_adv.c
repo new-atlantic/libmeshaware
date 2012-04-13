@@ -136,12 +136,12 @@ static int batman_adv_module_version (batman_adv_version *version)
 int batman_adv_module_version_string (char **version)
 {
 	batman_adv_version module_version;
-	
+
 	if (batman_adv_module_version (&module_version)) {
 		// TODO: Replace with ERR_CODE.
 		return -1;
 	}
-	
+
 	int release_len = 0;
 	int bugfix_len = 0;
 	int i = module_version.release_number;
@@ -164,14 +164,10 @@ int batman_adv_module_version_string (char **version)
 	}
 	int version_len = 4 + 1 + release_len + 1 + bugfix_len;
 
-	// FIXME: realloc should be able to deal with null pointers?! Bug?
-	if (*version == NULL) {
-		*version = malloc (version_len + 1);
+	char *tmp_ptr = realloc (*version, version_len + 1);
+	if (tmp_ptr) {
+		*version = tmp_ptr;
 	} else {
-		realloc (*version, version_len + 1);
-	}
-	// TODO: realloc vie tmp_ptr.
-	if (*version == NULL) {
 		// TODO: Replace with ERR_CODE.
 		return 1;
 	}
