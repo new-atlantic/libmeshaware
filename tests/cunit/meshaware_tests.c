@@ -32,10 +32,11 @@
 #include "../../src/meshaware.h"
 #include "../../src/batman_adv.c"
 
-void check_that_batman_adv_is_loaded(void) {
-	maw_mesh_protocol *returned_protocol = malloc(sizeof(maw_mesh_protocol));
-	if (!batman_adv_kernel_mod_loaded()
-	    && !maw_determine_mesh_protocol(returned_protocol)) {
+void check_that_batman_adv_is_loaded (void) {
+	maw_mesh_protocol *returned_protocol = malloc (sizeof (maw_mesh_protocol));
+	#ifdef __linux
+	if (  !batman_adv_kernel_mod_loaded()
+	   && !maw_determine_mesh_protocol (returned_protocol)) {
 		FILE *fp;
 		char *line = NULL;
 		size_t len = 0;
@@ -48,13 +49,16 @@ void check_that_batman_adv_is_loaded(void) {
 			CU_FAIL ("reading 'batman_adv/version' failed");
 
 		CU_ASSERT (returned_protocol->name == batman_adv);
-		CU_ASSERT (strncmp(returned_protocol->version, line, read - 1) == 0);
+		CU_ASSERT (strncmp (returned_protocol->version, line, read - 1) == 0);
 
 	} else {
-		CU_ASSERT (returned_protocol->name == none);
+	#endif
+	CU_ASSERT (returned_protocol->name == none);
+	#ifdef __linux
 	}
-	free(returned_protocol->version);
-	free(returned_protocol);
+	#endif
+	free (returned_protocol->version);
+	free (returned_protocol);
 }
 
 int main (void) {

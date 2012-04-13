@@ -26,6 +26,7 @@
 #include "batman_adv.h"
 
 int maw_determine_mesh_protocol (maw_mesh_protocol *protocol) {
+	#ifdef __linux
 	if (!batman_adv_kernel_mod_loaded()) {
 		protocol->name = batman_adv;
 		if (!batman_adv_module_version_string (&(protocol->version))) {
@@ -36,8 +37,11 @@ int maw_determine_mesh_protocol (maw_mesh_protocol *protocol) {
 			return 1;
 		}
 	} else {
-		protocol->name = none;
-		return NO_MESH_PROTOCOL_AVAILABLE;
+	#endif
+	protocol->name = none;
+	return NO_MESH_PROTOCOL_AVAILABLE;
+	#ifdef __linux
 	}
+	#endif
 }
 
