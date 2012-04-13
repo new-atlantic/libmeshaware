@@ -36,7 +36,7 @@ int maw_determine_mesh_protocol (maw_mesh_protocol *protocol) {
 			return 1;
 		}
 	} else {
-		protocol = NULL;
+		protocol->name = none;
 		return NO_MESH_PROTOCOL_AVAILABLE;
 	}
 }

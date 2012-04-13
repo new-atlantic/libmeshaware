@@ -35,6 +35,7 @@
 /** @} error_codes */
 
 typedef enum maw_protocol_name {
+	none,
 	batman_adv,
 } maw_protocol_name;
 

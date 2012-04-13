@@ -48,6 +48,8 @@ void check_that_batman_adv_is_loaded(void) {
 		CU_ASSERT (returned_protocol->name == batman_adv);
 		CU_ASSERT (strncmp(returned_protocol->version, line, read - 1) == 0);
 
+	} else {
+		CU_ASSERT (returned_protocol->name == none);
 	}
 	free(returned_protocol->version);
 	free(returned_protocol);
