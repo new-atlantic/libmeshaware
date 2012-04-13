@@ -51,6 +51,15 @@ int batman_adv_kernel_mod_version_supported (void)
     __attribute__ ((visibility ("internal")));
 
 /**
+ * @brief Test whether a bat_mesh is available.
+ *
+ * @retval 0 batman_adv mesh is available.
+ **/
+
+int bat_mesh_available (void)
+    __attribute__ ((visibility ("internal")));
+
+/**
  * @brief Get potential next hops in bat mesh.
  *
  * @param[in,out] addresses Pointer to an array of addresses. The funtion will
