@@ -3,10 +3,16 @@
 
 libmeshaware is a C library for writing "mesh aware" applications.
 
- 1. License
+ 1. Supported routing protocols
+ 2. License
 
 
-1. License
+1. Supported routing protocols
+
+Initially libmeshaware only supports the 'B.A.T.M.A.N. advanced' routing protocol. [1]
+
+
+2. License
 
 libmeshaware is free software; you can redistribute it and/or modify it under 
 the terms of the GNU Lesser General Public License as published by the Free 
@@ -15,3 +21,5 @@ later version.
 
 You can find a copy of the license in the COPYING file or at
 http://www.gnu.org/licenses/lgpl-3.0.txt.
+
+[1] http://www.open-mesh.org/
