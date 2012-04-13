@@ -19,13 +19,11 @@
 
 #ifdef __linux
 
-#ifndef _ISOC99_SOURCE
+#undef _ISOC99_SOURCE
 #define _ISOC99_SOURCE 1
-#endif
 
-#ifndef _XOPEN_SOURCE
+#undef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
-#endif
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -175,5 +173,5 @@ int main (void)
 	}
 }
 
-#endif
+#endif /* __linux */
 

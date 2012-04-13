@@ -17,9 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _XOPEN_SOURCE
+#undef _ISOC99_SOURCE
+#define _ISOC99_SOURCE 1
+
+#undef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
-#endif
 
 #include <stdlib.h>
 #include <string.h>

@@ -21,6 +21,7 @@
 
 #ifndef MESHAWARE_BATMAN_ADV_H
 #define MESHAWARE_BATMAN_ADV_H 1
+
 #ifdef __linux
 
 #define BATMAN_ADV_VERSION_PATH "/sys/module/batman_adv/version"
