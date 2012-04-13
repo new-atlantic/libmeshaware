@@ -104,9 +104,9 @@ void check_module_version (void) {
 		memcpy (bug, line + 7, read - 6);
 		bug[read - 6] = '\0';
 
-		CU_ASSERT (version->year == atoi (year));
-		CU_ASSERT (version->release_number == atoi (release));
-		CU_ASSERT (version->bugfix_counter == atoi (bug));
+		CU_ASSERT ((int) version->year == atoi (year));
+		CU_ASSERT ((int) version->release_number == atoi (release));
+		CU_ASSERT ((int) version->bugfix_counter == atoi (bug));
 
 		free (year);
 		free (release);
@@ -115,7 +115,7 @@ void check_module_version (void) {
 
 		len = 0;
 		char *version_string = NULL;
-		
+
 		if (batman_adv_module_version_string (&version_string)) {
 			CU_FAIL ("getting the version string failed");
 		}
@@ -126,8 +126,8 @@ void check_module_version (void) {
 		if ((read = getline (&line, &len, fp)) == -1)
 			CU_FAIL ("reading 'batman_adv/version' failed");
 
-		CU_ASSERT (strncmp(version_string, line, read - 1) == 0);
-		
+		CU_ASSERT (strncmp (version_string, line, read - 1) == 0);
+
 		free (line);
 	}
 }
