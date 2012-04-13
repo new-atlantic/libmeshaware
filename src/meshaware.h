@@ -72,7 +72,7 @@ int maw_determine_mesh_protocol(maw_mesh_protocol*);
  * @brief Returns a the number and addresses of neighbouring nodes.
  *
  *
- * @param[in]     protocol  Mesh protool type & version.
+ * @param[in]     protocol  Mesh protocol type & version.
  * @param[out]    addr_type Type of netwotk address in addresses.
  * @param[in,out] addresses Pointer to an array of addresses. The funtion will
  *                          call malloc for a NULL-pointer or reallocate the
@@ -88,6 +88,20 @@ int maw_determine_mesh_protocol(maw_mesh_protocol*);
 int maw_potential_next_hops (maw_mesh_protocol const *protocol,
                              maw_address_type        *addr_type,
                              maw_address             *addresses);
+
+/**
+ * @brief Get the number of nodes in mesh network.
+ *
+ * @param[in]     protocol Mesh protocol type & version.
+ * @param[out]    nodes    Number of nodes in mesh network.
+ *
+ * @returns Error code.
+ *
+ * @retval 0 Function call successful.
+ **/
+
+int maw_n_nodes_in_mesh (maw_mesh_protocol const *protocol,
+                         unsigned int            *nodes);
 
 #endif /* MESHAWARE_H */
 

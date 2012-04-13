@@ -77,6 +77,19 @@ int batman_adv_mesh_potential_next_hops (/* pointer to array of (MAC?)addresses 
 int batman_adv_module_version_string (char **version)
     __attribute__ ((visibility ("internal")));
 
+/**
+ * @brief Get the number of nodes in a batman_adv mesh network.
+ *
+ * @param[out]    bat_nodes    Number of nodes in mesh network.
+ *
+ * @returns Error code.
+ *
+ * @retval 0 Function call successful.
+ **/
+
+int nodes_in_bat_mesh (unsigned int            *bat_nodes)
+    __attribute__ ((visibility ("internal")));
+
 #endif /* __linux */
 #endif /* MESHAWARE_BATMAN_ADV_H */
 
