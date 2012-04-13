@@ -14,5 +14,5 @@ Makefile
 cmake_install.cmake
 CTestTestfile.cmake
 Testing/
-cunit_batman_adv
 install_manifest.txt
+*.dylib
