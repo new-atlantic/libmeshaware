@@ -31,9 +31,12 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "batman_adv.h"
+
+#define BAT0_INTERFACE_PATH "/sys/devices/virtual/net/bat0"
 
 /* We only support the "new" version numbering introduced with 2010.0.0. We
  * don't see much reason to even trying to support older versions than that.
@@ -79,6 +82,41 @@ int batman_adv_kernel_mod_loaded (void)
 		else
 			// TODO: Do the other errors apply to F_OK?
 			return -1;
+	}
+}	
+
+static int bat_interface_available (void)
+{
+	// Checking the sys filesystem should work since 2010.0.0, not before.
+	if (access (BAT0_INTERFACE_PATH, F_OK) != -1) {
+		return 0;
+	} else {
+		if (errno == ENOENT)
+			return 1;
+		else
+			// TODO: Do the other errors apply to F_OK?
+			return -1;
+	}
+}
+
+static int bat_interface_state (void)
+{
+	//TODO: use defines for return values.
+	FILE *fp;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+
+	fp = fopen (BAT0_INTERFACE_PATH , "r");
+	
+	if (!fp) return -1;
+	
+	if ((read = getline (&line, &len, fp)) == -1) {
+		return -1;
+	} else if (!strncmp (line, "down", read)) {
+		return -1;
+	} else /* and if carrier = 1 */ {
+		return 0;
 	}
 }
 
