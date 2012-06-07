@@ -20,48 +20,24 @@ require 'batman_adv'
 local M = {}
 meshaware = M
 
---- Check whether a mesh network is available.
--- @return nil If no mesh network is available return nil.
--- @return protocol Return a protocol "object".
-function M.mesh_available ()
-	if batman_adv.batmesh_available () then
-		return 'batman_adv'
+M.mesh = {}
+
+--- Check whether a mesh network is available and initialize the mesh object.
+-- TODO: Support for prefering a specific mesh protocol if multiple available.
+-- @return true Mesh network is available.
+-- @return false No mesh network available.
+function M.mesh.mesh_available (self)
+	self.protocol = {}
+	if batman_adv.batmesh_available (self.protocol) then
+		self.n_nodes_in_mesh = batman_adv.n_nodes_in_batmesh
+		self.n_neighbours = batman_adv.batmesh_n_neighbours
+		self.n_next_hops = batman_adv.batmesh_n_next_hops
+		return true
 	else
-		return nil
+		self = nil
+		return false
 	end
 end
-
---- Get the number of nodes in the network.
--- @param protocol A mesh protocol object from mesh_available ()
--- @return number The number of nodes in the network.
--- @return 0 No nodes other than self in network.
--- @return nil Protocol or mesh not available.
-function M.n_nodes_in_mesh (protocol)
-	if protocol == 'batman_adv' then
-		return batman_adv.n_nodes_in_batmesh ()
-	else
-		return nil
-	end
-end
-
---- Get the number of potential next hops.
--- @param protocol A mesh protocol object from mesh_available ()
--- @return number The number of potential next hops.
--- @return 0 No nodes other than self in network.
--- @return nil Protocol or mesh not available.
-function M.n_neighbours (protocol)
-	return nil
-end
-
---- Get the number of actual next hops.
--- @param protocol A mesh protocol object from mesh_available ()
--- @return number The number of next hops.
--- @return 0 No nodes other than self in network.
--- @return nil Protocol or mesh not available.
-function M.n_next_hops (protocol)
-	return nil
-end
-
 
 return meshaware
 

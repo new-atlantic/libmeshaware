@@ -15,10 +15,26 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+-- batman-adv releases to date. Last updated 2012-03-25.
+-- Version scheme description:
+-- http://www.open-mesh.org/wiki/open-mesh/2010-06-19-batman-adv-2010-0-0-release
+--
+-- RELEASE  | DATE       | STATUS
+-- ---------|------------|-------
+-- 2010.0.0 | 2010-06-19 | unknown
+-- 2010.1.0 | 2010-09-04 | unknown
+-- 2010.2.0 | 2010-11-22 | unknown
+-- 2011.1.0 | 2011-01-29 | unknown
+-- 2011.2.0 | 2011-04-19 | unknown
+-- 2011.3.0 | 2011-06-19 | unknown
+-- 2011.3.1 | 2011-10-19 | unknown
+-- 2011.4.0 | 2011-11-14 | partially tested
+-- 2012.0.0 | 2012-02-09 | unknown
+
 local M = {}
 batman_adv = M
 
---- Check whether the batman_adv kernel module is loaded.
+--- LOCAL: Check whether the batman_adv kernel module is loaded.
 -- @return true The module is loaded.
 -- @return false The module is not loaded.
 -- @return nil Could not open /proc/modules. Is this linux?
@@ -27,10 +43,10 @@ local function batman_adv_kmod_loaded ()
 	if not f then
 		return nil
 	end
-	
+
 	local s = f:read ('*all')
 	f:close ()
-	
+
 	if s:match ('batman_adv') then
 		return true
 	else
@@ -38,8 +54,7 @@ local function batman_adv_kmod_loaded ()
 	end
 end
 
-
---- Get the batman_adv kernel module version.
+--- LOCAL: Get the batman_adv kernel module version.
 -- @return version Version string.
 -- @return nil Could not open /sys/module/batman_adv/version. Module not loaded?
 local function batman_adv_kmod_version ()
@@ -47,15 +62,14 @@ local function batman_adv_kmod_version ()
 	if f then
 		local s = f:read ('*all')
 		f:close ()
-		return s:sub(1, -2)
+		return s:sub(1, -2) -- Return string without \n.
 	else
 		return nil
 	end
 end
 
---- Test whether a version of batman_adv is supported.
--- TODO: The supported versions list should be based on
--- tests.
+--- LOCAL: Test whether a version of batman_adv is supported.
+-- TODO: The supported versions list should be based on tests.
 -- @param version batman_adv version string.
 -- @return true Version is supported.
 -- @return false Version is not supported.
@@ -70,16 +84,15 @@ local function batman_adv_kmod_version_supported (version)
 	else
 		return false
 	end
-
-	return
 end
 
-
---- Check whether a bat0 interface is available.
+--- LOCAL: Check whether a bat0 interface is available.
+-- TODO: The interface does not have to be called bat0 and there could
+-- be multiple bat-interfaces.
 -- @return true Interface is available.
 -- @return false Interface is not available.
 local function bat_interface_available ()
-	local f = io.open ('/sys/class/net/bat0/type', 'r')
+	local f = io.open ('/sys/devices/virtual/net/bat0/type', 'r')
 	if not f then
 		return false
 	else
@@ -88,13 +101,14 @@ local function bat_interface_available ()
 	end
 end
 
---- Check that the bat0 interface is up.
+--- LOCAL: Check that the bat0 interface is up.
+-- TODO: Check that the tests are correct for all kinds of network interfaces.
 -- @return true The interface is up.
 -- @return false The interface is down.
 -- @return nil The interface is not available/does not exist.
 local function bat_interface_up ()
-	local o = io.open ('/sys/class/net/bat0/operstate', 'r')
-	local c = io.open ('/sys/class/net/bat0/carrier', 'r')
+	local o = io.open ('/sys/devices/virtual/net/bat0/operstate', 'r')
+	local c = io.open ('/sys/devices/virtual/net/bat0/carrier', 'r')
 
 	if not o then
 		return nil
@@ -108,7 +122,7 @@ local function bat_interface_up ()
 	local os = o:read ('*all')
 	local cs = c:read ('*all')
 
-	if os:match('down') then
+	if os:match('down\n') then
 		return false
 	elseif (os:match('up\n') or os:match ('unknown\n'))
 	       and cs:match ('1\n') then
@@ -121,8 +135,12 @@ local function bat_interface_up ()
 	c:close ()
 end
 
---- Check that that the bat0 interface is connected to a network.
--- TODO: Not implemented yet. Different test for wired and Wifi?
+--- LOCAL: Check that that the bat0 interface is connected to a network.
+-- TODO: Not implemented yet. Different test for wired and wifi?
+-- e.g. eth0 cable and speaking to other device
+-- wifi, connected to a adhoc network
+-- @return true The interface is connected.
+-- @return false The interface is not connected.
 local function bat_interface_connected ()
 	return false
 end
@@ -130,7 +148,7 @@ end
 --- Check that a working batman_adv mesh network is available.
 -- @return true A batmesh is available.
 -- @return false A batmesh is not available.
-function M.batmesh_available ()
+function M.batmesh_available (protocol)
 	if not batman_adv_kmod_loaded () then
 		return false
 	elseif not batman_adv_kmod_version_supported ( batman_adv_kmod_version ()) then
@@ -142,6 +160,8 @@ function M.batmesh_available ()
 	elseif not bat_interface_connected () then
 		return false
 	else
+		protocol.name = 'batman_adv'
+		protocol.version = batman_adv_kmod_version ()
 		return true
 	end
 end
@@ -162,8 +182,9 @@ function M.n_nodes_in_batmesh ()
 	f:read ('*line')
 	local s = f:read ('*line')
 	if not s:match ('No batman nodes in range ...') then
-		while f:read () do
+		while s do
 			counter = counter + 1
+			s = f:read ('*line')
 		end
 		f:close ()
 		return counter
@@ -173,16 +194,54 @@ function M.n_nodes_in_batmesh ()
 	end
 end
 
---- Get the number of potential nexthops in the batmesh.
+--- Get the number of potential next hops in the batmesh.
 -- TODO: Not implemented yet.
 function M.batmesh_n_neighbours ()
-	return nil
+	local f = io.open ('/sys/kernel/debug/batman_adv/bat0/originators', 'r')
+	if not f then
+		return nil
+	end
+
+	f:read ('*line')
+	f:read ('*line')
+	local s = f:read ('*line')
+	if not s:match ('No batman nodes in range ...') then
+		local neighbours = {}
+		while s do
+			-- do stuff
+			s = f:read ('*line')
+		end
+		f:close ()
+		return neighbours
+	else
+		f:close ()
+		return 0
+	end
 end
 
 --- Get the number of actual next hops in the batmesh.
 -- TODO: Not implemented yet.
-function M.batmesh_n_next_hops (protocol)
-	return nil
+function M.batmesh_n_next_hops ()
+	local f = io.open ('/sys/kernel/debug/batman_adv/bat0/originators', 'r')
+	if not f then
+		return nil
+	end
+
+	f:read ('*line')
+	f:read ('*line')
+	local s = f:read ('*line')
+	if not s:match ('No batman nodes in range ...') then
+		local next_hops = {}
+		while s do
+			-- do stuff
+			s = f:read ('*line')
+		end
+		f:close ()
+		return next_hops
+	else
+		f:close ()
+		return 0
+	end
 end
 
 return batman_adv
