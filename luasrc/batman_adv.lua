@@ -208,9 +208,13 @@ function M.batmesh_n_neighbours ()
 	if not s:match ('No batman nodes in range ...') then
 		local neighbours = {}
 		while s do
-			-- do stuff
+			for mac_address in s:gmatch('%x%x:%x%x:%x%x:%x%x:%x%x:%x%x') do
+			-- skip two first addresses (destination and next-hop)
+			-- rest are potential next hops
+			end
 			s = f:read ('*line')
 		end
+		-- remove duplicates
 		f:close ()
 		return neighbours
 	else
@@ -233,9 +237,13 @@ function M.batmesh_n_next_hops ()
 	if not s:match ('No batman nodes in range ...') then
 		local next_hops = {}
 		while s do
-			-- do stuff
+			for mac_address in s:gmatch('%x%x:%x%x:%x%x:%x%x:%x%x:%x%x') do
+			-- skip first and third & ... addresses (destination and potential next hops)
+			-- 2nd mac address is actual next hop
+			end
 			s = f:read ('*line')
 		end
+		-- remove duplicates
 		f:close ()
 		return next_hops
 	else
