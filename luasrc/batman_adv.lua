@@ -157,8 +157,8 @@ function M.batmesh_available (protocol)
 		return false
 	elseif not bat_interface_up () then
 		return false
-	elseif not bat_interface_connected () then
-		return false
+--	elseif not bat_interface_connected () then
+--		return false
 	else
 		protocol.name = 'batman_adv'
 		protocol.version = batman_adv_kmod_version ()
@@ -195,7 +195,6 @@ function M.n_nodes_in_batmesh ()
 end
 
 --- Get the number of potential next hops in the batmesh.
--- TODO: Not implemented yet.
 function M.batmesh_n_neighbours ()
 	local f = io.open ('/sys/kernel/debug/batman_adv/bat0/originators', 'r')
 	if not f then
@@ -207,15 +206,24 @@ function M.batmesh_n_neighbours ()
 	local s = f:read ('*line')
 	if not s:match ('No batman nodes in range ...') then
 		local neighbours = {}
+		neighbours.addr_type = "mac"
+		local neighbour_mac_addresses = {}
+		neighbours.addresses = {}
 		while s do
+			local counter = 0
 			for mac_address in s:gmatch('%x%x:%x%x:%x%x:%x%x:%x%x:%x%x') do
-			-- skip two first addresses (destination and next-hop)
-			-- rest are potential next hops
+				counter = counter + 1
+				if counter > 2 then
+					neighbour_mac_addresses[mac_address] = true
+				end
 			end
+			counter = 0
 			s = f:read ('*line')
 		end
-		-- remove duplicates
 		f:close ()
+		for key, value in pairs(neighbour_mac_addresses) do
+			neighbours.addresses[#neighbours.addresses + 1] = key
+		end
 		return neighbours
 	else
 		f:close ()
@@ -224,7 +232,6 @@ function M.batmesh_n_neighbours ()
 end
 
 --- Get the number of actual next hops in the batmesh.
--- TODO: Not implemented yet.
 function M.batmesh_n_next_hops ()
 	local f = io.open ('/sys/kernel/debug/batman_adv/bat0/originators', 'r')
 	if not f then
@@ -236,15 +243,25 @@ function M.batmesh_n_next_hops ()
 	local s = f:read ('*line')
 	if not s:match ('No batman nodes in range ...') then
 		local next_hops = {}
+		next_hops.addr_type = "mac"
+		local next_hop_mac_addresses = {}
+		next_hops.addresses = {}
 		while s do
+			local counter = 0
 			for mac_address in s:gmatch('%x%x:%x%x:%x%x:%x%x:%x%x:%x%x') do
-			-- skip first and third & ... addresses (destination and potential next hops)
-			-- 2nd mac address is actual next hop
+				counter = counter + 1
+				if counter == 2 then
+					next_hop_mac_addresses[mac_address] = true
+					break
+				end
 			end
+			counter = 0
 			s = f:read ('*line')
 		end
-		-- remove duplicates
 		f:close ()
+		for key, value in pairs(next_hop_mac_addresses) do
+			next_hops.addresses[#next_hops.addresses + 1] = key
+		end
 		return next_hops
 	else
 		f:close ()
