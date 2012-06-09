@@ -194,21 +194,22 @@ function M.n_nodes_in_batmesh ()
 	end
 end
 
---- Get the number of potential next hops in the batmesh.
-function M.batmesh_n_neighbours ()
+--- Get the  potential next hops in the batmesh.
+function M.batmesh_neighbours ()
 	local f = io.open ('/sys/kernel/debug/batman_adv/bat0/originators', 'r')
 	if not f then
 		return nil
 	end
 
+	local neighbours = {}
+	neighbours.addr_type = "mac"
+	local neighbour_mac_addresses = {}
+	neighbours.addresses = {}
+
 	f:read ('*line')
 	f:read ('*line')
 	local s = f:read ('*line')
 	if not s:match ('No batman nodes in range ...') then
-		local neighbours = {}
-		neighbours.addr_type = "mac"
-		local neighbour_mac_addresses = {}
-		neighbours.addresses = {}
 		while s do
 			local counter = 0
 			for mac_address in s:gmatch('%x%x:%x%x:%x%x:%x%x:%x%x:%x%x') do
@@ -220,32 +221,30 @@ function M.batmesh_n_neighbours ()
 			counter = 0
 			s = f:read ('*line')
 		end
-		f:close ()
 		for key, value in pairs(neighbour_mac_addresses) do
 			neighbours.addresses[#neighbours.addresses + 1] = key
 		end
-		return neighbours
-	else
-		f:close ()
-		return 0
 	end
+	f:close ()
+	return neighbours
 end
 
---- Get the number of actual next hops in the batmesh.
-function M.batmesh_n_next_hops ()
+--- Get the actual next hops in the batmesh.
+function M.batmesh_next_hops ()
 	local f = io.open ('/sys/kernel/debug/batman_adv/bat0/originators', 'r')
 	if not f then
 		return nil
 	end
 
+	local next_hops = {}
+	next_hops.addr_type = "mac"
+	local next_hop_mac_addresses = {}
+	next_hops.addresses = {}
+
 	f:read ('*line')
 	f:read ('*line')
 	local s = f:read ('*line')
 	if not s:match ('No batman nodes in range ...') then
-		local next_hops = {}
-		next_hops.addr_type = "mac"
-		local next_hop_mac_addresses = {}
-		next_hops.addresses = {}
 		while s do
 			local counter = 0
 			for mac_address in s:gmatch('%x%x:%x%x:%x%x:%x%x:%x%x:%x%x') do
@@ -258,15 +257,12 @@ function M.batmesh_n_next_hops ()
 			counter = 0
 			s = f:read ('*line')
 		end
-		f:close ()
 		for key, value in pairs(next_hop_mac_addresses) do
 			next_hops.addresses[#next_hops.addresses + 1] = key
 		end
-		return next_hops
-	else
-		f:close ()
-		return 0
 	end
+	f:close ()
+	return next_hops
 end
 
 return batman_adv

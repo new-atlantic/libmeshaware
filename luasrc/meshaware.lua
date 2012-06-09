@@ -30,8 +30,8 @@ function M.mesh.mesh_available (self)
 	self.protocol = {}
 	if batman_adv.batmesh_available (self.protocol) then
 		self.n_nodes_in_mesh = batman_adv.n_nodes_in_batmesh
-		self.n_neighbours = batman_adv.batmesh_n_neighbours
-		self.n_next_hops = batman_adv.batmesh_n_next_hops
+		self.neighbours = batman_adv.batmesh_neighbours
+		self.next_hops = batman_adv.batmesh_next_hops
 		return true
 	else
 		self = nil
