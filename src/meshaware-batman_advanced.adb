@@ -312,7 +312,7 @@ package body MeshAware.BATMAN_Advanced is
          Line : constant String := Ada.Text_IO.Get_Line (File);
       begin
          Ada.Text_IO.Close (File => File);
-         return Line (Line'First .. Line'Last);
+         return Line;
       end;
 
    exception
