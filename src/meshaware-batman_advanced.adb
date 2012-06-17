@@ -149,21 +149,18 @@ package body MeshAware.BATMAN_Advanced is
    ----------------------------------------------------------------------------
 
 
-   function Number_Of_Neighbours (Mesh_Object : in Bat_Mesh)
-                                 return Node_Count is
-      Filename : constant String :=  "/sys/kernel/debug/batman_adv/"
+   function Number_Of_Nodes (Mesh_Object : in Bat_Mesh)
+                            return Node_Count is
+      Filename        : constant String := Debug_FS_Path & "/batman_adv/"
         & Mesh_Object.Default_Interface & "/originators";
-      --  TODO: implement debugfs_path
-      --  Filename        : constant String := Debug_FS_Path & "/batman_adv/"
-      --   & Bat_Interface & "/originators";
       File : Ada.Text_IO.File_Type;
-      Number_Of_Nodes : Node_Count             := 0;
+      N_Nodes : Node_Count             := 0;
    begin
       Ada.Text_IO.Open (File => File,
                         Mode => Ada.Text_IO.In_File,
                         Name => Filename);
       while not Ada.Text_IO.End_Of_File (File) loop
-         Number_Of_Nodes := Number_Of_Nodes + 1;
+         N_Nodes := N_Nodes + 1;
          declare
             Line : constant String := Ada.Text_IO.Get_Line (File);
          begin
@@ -174,9 +171,9 @@ package body MeshAware.BATMAN_Advanced is
          end;
       end loop;
 
-      Number_Of_Nodes := Number_Of_Nodes - 2;
+      N_Nodes := N_Nodes - 2;
       Ada.Text_IO.Close (File => File);
-      return Number_Of_Nodes;
+      return N_Nodes;
 
    exception
       when Ada.IO_Exceptions.Name_Error =>
@@ -190,7 +187,7 @@ package body MeshAware.BATMAN_Advanced is
          end if;
       when Debug_FS_Error =>
          raise Debug_FS_Error;
-   end Number_Of_Neighbours;
+   end Number_Of_Nodes;
 
    ----------------------------------------------------------------------------
    ----------------

@@ -36,8 +36,8 @@ package MeshAware.BATMAN_Advanced is
 
    overriding function Available (Mesh_Object : in Bat_Mesh) return Boolean;
 
-   overriding function Number_Of_Neighbours (Mesh_Object : in Bat_Mesh)
-                                             return Node_Count;
+   overriding function Number_Of_Nodes (Mesh_Object : in Bat_Mesh)
+                                       return Node_Count;
 
    ---------------------
    --  Bat_Interface  --

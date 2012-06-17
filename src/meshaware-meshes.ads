@@ -39,8 +39,14 @@ package MeshAware.Meshes is
 
    function Available (Mesh_Object : in Mesh) return Boolean is abstract;
 
-   function Number_Of_Neighbours (Mesh_Object : in Mesh)
-                                 return Node_Count is abstract;
+   function Number_Of_Nodes (Mesh_Object : in Mesh)
+                            return Node_Count is abstract;
+
+   --  function Number_Of_Nodes (Mesh_Object : in Mesh)
+   --                           return Node_Count is abstract;
+
+   --  function Number_Of_Next_Hops (Mesh_Object : in Mesh)
+   --                               return Node_Count is abstract;
 
    --  function Get_Own_Node return Node is abstract;
 
