@@ -26,40 +26,15 @@ use MeshAware.Exceptions;
 package body MeshAware.BATMAN_Advanced is
 
    ----------------------------------------------------------------------------
-   ----------------
-   --  Bat_Mesh  --
-   ----------------
+   ---------------------
+   --  Bat_Interface  --
+   ---------------------
 
-   function Get_Mesh return Bat_Mesh is
-      The_Mesh : Bat_Mesh;
-   begin
-      return The_Mesh;
-   end Get_Mesh;
-
-   ----------------------------------------------------------------------------
-
-   function Available (Mesh_Object : in Bat_Mesh) return Boolean is
-   begin
-      if Kernel_Module_Available
-         and Kernel_Module_Loaded
-         and Mesh_Object.Bat_Interface_Available
-         and Mesh_Object.Bat_Interface_Up then
-         return True;
-      else
-         return False;
-      end if;
-   exception
-      when BATMAN_Adv_Module_Error | Linux_Error | Network_Interface_Error =>
-         return False;
-   end Available;
-
-   ----------------------------------------------------------------------------
-
-   function Bat_Interface_Available (Bat_Mesh_Object : Bat_Mesh)
-                                    return Boolean is
+   function Available (Interface_Object : Bat_Interface)
+                      return Boolean is
       --  Tests whether the interface directory exists.
       Interface_Path : constant String := "/sys/devices/virtual/net/"
-                                        & Bat_Mesh_Object.Default_Interface;
+                                        & Interface_Object.Name;
       Availability   : Boolean;
    begin
       if Ada.Directories.Exists (Name => Interface_Path) then
@@ -77,19 +52,19 @@ package body MeshAware.BATMAN_Advanced is
          raise BATMAN_Adv_Module_Error;
       when Linux_Error =>
          raise Linux_Error;
-   end Bat_Interface_Available;
+   end Available;
 
    ----------------------------------------------------------------------------
 
-   function Bat_Interface_Up (Bat_Mesh_Object : Bat_Mesh)
-                             return Boolean is
+   function Up (Interface_Object : Bat_Interface)
+               return Boolean is
       --  Check operstate and carrier to find out the network interface state
       --  TODO: check that tests are correct for all types of network
       --        interfaces (wifi, ethernet, ?bluetooth?, ppp)
       Operstate_Filename : constant String := "/sys/devices/virtual/net/"
-        & Bat_Mesh_Object.Default_Interface & "/operstate";
+        & Interface_Object.Name & "/operstate";
       Carrier_Filename : constant String := "/sys/devices/virtual/net/"
-        & Bat_Mesh_Object.Default_Interface & "/carrier";
+        & Interface_Object.Name & "/carrier";
       Operstate_File     : Ada.Text_IO.File_Type;
       Carrier_File     : Ada.Text_IO.File_Type;
       State              : Boolean;
@@ -98,7 +73,7 @@ package body MeshAware.BATMAN_Advanced is
          raise BATMAN_Adv_Module_Error;
       end if;
 
-      if not Bat_Interface_Available (Bat_Mesh_Object => Bat_Mesh_Object) then
+      if not Available (Interface_Object => Interface_Object) then
          raise Network_Interface_Error;
       end if;
 
@@ -147,15 +122,42 @@ package body MeshAware.BATMAN_Advanced is
          --  operstate is "down" and so we never try to open carrier if the
          --  interface is down.
          return False;
-   end Bat_Interface_Up;
+   end Up;
+
+   ----------------------------------------------------------------------------
+   ----------------
+   --  Bat_Mesh  --
+   ----------------
+
+   function Get_Mesh return Bat_Mesh is
+      The_Mesh : Bat_Mesh;
+   begin
+      return The_Mesh;
+   end Get_Mesh;
 
    ----------------------------------------------------------------------------
 
+   function Available (Mesh_Object : in Bat_Mesh) return Boolean is
+   begin
+      if Kernel_Module_Available
+         and Kernel_Module_Loaded
+         and Mesh_Object.Default_Interface.Available
+         and Mesh_Object.Default_Interface.Up then
+         return True;
+      else
+         return False;
+      end if;
+   exception
+      when BATMAN_Adv_Module_Error | Linux_Error | Network_Interface_Error =>
+         return False;
+   end Available;
+
+   ----------------------------------------------------------------------------
 
    function Number_Of_Nodes (Mesh_Object : in Bat_Mesh)
                             return Node_Count is
       Filename        : constant String := Debug_FS_Path & "/batman_adv/"
-        & Mesh_Object.Default_Interface & "/originators";
+        & Mesh_Object.Default_Interface.Name & "/originators";
       File : Ada.Text_IO.File_Type;
       N_Nodes : Node_Count             := 0;
    begin
@@ -182,7 +184,7 @@ package body MeshAware.BATMAN_Advanced is
       when Ada.IO_Exceptions.Name_Error =>
          if not Kernel_Module_Loaded then
             raise BATMAN_Adv_Module_Error;
-         elsif not Bat_Interface_Available (Mesh_Object) then
+         elsif not Mesh_Object.Default_Interface.Available then
             raise Network_Interface_Error;
          else
             --  TODO: Is this correct? When would 'else' occur?

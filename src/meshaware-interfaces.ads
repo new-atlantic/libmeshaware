@@ -19,9 +19,10 @@ package MeshAware.Interfaces is
 
    type Network_Interface is interface;
 
-   --  function Available (Interface_Object : in Network_Interface)
-   --                     return Boolean is abstract;
-   --  function Up (Interface_Object : in Network_Interface)
-   --              return Boolean is abstract;
+   function Available (Interface_Object : in Network_Interface)
+                      return Boolean is abstract;
+
+   function Up (Interface_Object : in Network_Interface)
+               return Boolean is abstract;
 
 end MeshAware.Interfaces;

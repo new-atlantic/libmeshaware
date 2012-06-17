@@ -17,6 +17,8 @@
 
 with MeshAware.Addresses;
 use  MeshAware.Addresses;
+with MeshAware.Interfaces;
+use MeshAware.Interfaces;
 with MeshAware.Meshes;
 use MeshAware.Meshes;
 with MeshAware.Nodes;
@@ -24,12 +26,27 @@ use MeshAware.Nodes;
 
 package MeshAware.BATMAN_Advanced is
 
+   ---------------------
+   --  Bat_Interface  --
+   ---------------------
+
+   type Bat_Interface is new Network_Interface with record
+      Name : String (1 .. 4) := "bat0";
+      --  Physical_Interface : Network_Interface'Class;
+   end record;
+
+   overriding function Available
+     (Interface_Object : Bat_Interface) return Boolean;
+
+   overriding function Up
+     (Interface_Object : Bat_Interface) return Boolean;
+
    ----------------
    --  Bat_Mesh  --
    ----------------
 
    type Bat_Mesh is new Mesh with record
-      Default_Interface : String (1 .. 4) := "bat0";
+      Default_Interface : Bat_Interface;
    end record;
 
    overriding function Get_Mesh return Bat_Mesh;
@@ -38,18 +55,6 @@ package MeshAware.BATMAN_Advanced is
 
    overriding function Number_Of_Nodes (Mesh_Object : in Bat_Mesh)
                                        return Node_Count;
-
-   ---------------------
-   --  Bat_Interface  --
-   ---------------------
-
-   --  TODO: override MeshAware.Interfaces
-   not overriding function Bat_Interface_Available
-     (Bat_Mesh_Object : Bat_Mesh) return Boolean;
-
-   not overriding function Bat_Interface_Up
-     (Bat_Mesh_Object : Bat_Mesh) return Boolean;
-
 
    --  procedure Set_Default_Interface;
 
