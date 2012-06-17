@@ -31,16 +31,17 @@ package MeshAware.BATMAN_Advanced is
    ---------------------
 
    type Bat_Interface is new Network_Interface with record
-      Name : String (1 .. 4) := "bat0";
+      IF_Name : String (1 .. 4) := "bat0";
       --  Physical_Interface : Network_Interface'Class;
    end record;
 
-   overriding function Available
-     (Interface_Object : Bat_Interface) return Boolean;
+   overriding function Available (Interface_Object : in Bat_Interface)
+                                 return Boolean;
 
-   overriding function Up
-     (Interface_Object : Bat_Interface) return Boolean;
+   overriding function Up (Interface_Object : in Bat_Interface) return Boolean;
 
+   overriding function Name (Interface_Object : in Bat_Interface)
+                            return String;
    ----------------
    --  Bat_Mesh  --
    ----------------

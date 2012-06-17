@@ -25,4 +25,7 @@ package MeshAware.Interfaces is
    function Up (Interface_Object : in Network_Interface)
                return Boolean is abstract;
 
+   function Name (Interface_Object : in Network_Interface)
+                 return String is abstract;
+
 end MeshAware.Interfaces;

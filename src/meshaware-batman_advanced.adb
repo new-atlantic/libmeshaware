@@ -125,6 +125,13 @@ package body MeshAware.BATMAN_Advanced is
    end Up;
 
    ----------------------------------------------------------------------------
+
+   function Name (Interface_Object : in Bat_Interface) return String is
+   begin
+      return Interface_Object.IF_Name;
+   end Name;
+
+   ----------------------------------------------------------------------------
    ----------------
    --  Bat_Mesh  --
    ----------------
