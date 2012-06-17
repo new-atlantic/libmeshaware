@@ -48,6 +48,9 @@ package body MeshAware.BATMAN_Advanced is
       else
          return False;
       end if;
+   exception
+      when BATMAN_Adv_Module_Error | Linux_Error | Network_Interface_Error =>
+         return False;
    end Available;
 
    ----------------------------------------------------------------------------
