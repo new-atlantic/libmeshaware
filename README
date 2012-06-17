@@ -1,7 +1,7 @@
  libmeshaware
 --------------
 
-libmeshaware is a C library for writing "mesh aware" applications.
+libmeshaware is an Ada library for writing "mesh aware" applications.
 
  1. Supported routing protocols
  2. License

@@ -1,0 +1,15 @@
+library project Build_LibMeshAware is
+   for Library_Name    use          "meshaware";
+   for Library_Kind    use external ("LIBRARY_KIND");
+   for Library_Version use external ("SONAME");
+   for Library_Dir     use          "lib";
+   for Source_Dirs     use          ("src");
+   for Object_Dir      use external ("OBJ_DIR");
+   package Compiler is
+      for Default_Switches ("Ada") use
+        ("-g", "-O2", "-gnatafnoy", "-gnatVa", "-gnatwa", "-fstack-check");
+   end Compiler;
+   package Binder is
+      for Default_Switches ("Ada") use ("-E");
+   end Binder;
+end Build_LibMeshAware;

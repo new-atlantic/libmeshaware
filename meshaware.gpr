@@ -1,0 +1,19 @@
+--  This project file is designed to help build applications that use MeshAware.
+--  Here is an example of how to use this project file:
+--
+--  with "meshaware";
+--  project Example is
+--     for Object_Dir use "obj";
+--     for Exec_Dir use ".";
+--     for Main use ("example");
+--  end Example;
+
+project MeshAware is
+   for Library_Name use "meshaware";
+   for Library_Dir use "/usr/lib";
+   for Library_Kind use "dynamic";
+   for Source_Dirs use ("/usr/share/ada/adainclude/meshaware");
+   for Library_ALI_Dir use "/usr/lib/ada/adalib/meshaware";
+   for Externally_Built use "true";
+end MeshAware;
+
