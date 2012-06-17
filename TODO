@@ -1,0 +1,31 @@
+Testing
+-------
+
+* Add unit tests.
+    * AUnit?
+    * Needs MeshConfig to change state of mesh network.
+
+* Set up virtual testing platform?
+    * Automated builds?
+
+Documentation
+-------------
+
+* Document function/procedure parameters, return values and exceptions in
+  specification files.
+
+Protocols
+---------
+
+Missing protocols
+*****************
+
+* Bluetooth
+* olsr
+* Babel
+* regular LAN
+
+B.A.T.M.A.N. Advanced
+*********************
+
+* Add multiple version support.
