@@ -3,7 +3,7 @@ all:
 	if [ ! -d bin ]; then mkdir bin; fi
 	gprbuild batman_adv_tests.gpr
 
-test: all
+test:
 	su -c "./runner.sh"
 
 clean:

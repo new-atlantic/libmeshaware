@@ -16,16 +16,19 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-echo -e "\t\t\t\t\tTEST\t\tEXPECTED\t\tRESULT"
-echo -e "\t\t\t\t\t----\t\t--------\t\t------"
+PASS="$(echo -n '['; tput setaf 2; echo -n 'pass'; tput sgr0; echo -n ']')"
+FAIL="$(echo -n '['; tput setaf 1; echo -n 'fail'; tput sgr0; echo -n ']')"
+
+echo -e "\t\t\t\t\t TEST\t\tEXPECTED\t\tRESULT"
+echo -e "\t\t\t\t\t ----\t\t--------\t\t------"
 #########
 echo -n "1 Test: Kernel_Version"
 EXPECTED="$(uname -r)"
 RESULT="$(bin/kernel_version)"
 if [ "$EXPECTED" == "$RESULT" ]; then
-    echo -e "\t\t\tPASS\t\t$EXPECTED\t\t$RESULT"
+    echo -e "\t\t\t$PASS\t\t$EXPECTED\t\t$RESULT"
 else
-    echo -e "\t\tFAIL\t\t$EXPECTED\t\t$RESULT"
+    echo -e "\t\t$FAIL\t\t$EXPECTED\t\t$RESULT"
 fi
 
 #########
@@ -40,9 +43,9 @@ fi;
 
 RESULT=$(bin/kmod_available)
 if [ "$EXPECTED" == "$RESULT" ]; then
-    echo -e "\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+    echo -e "\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
 else
-    echo -e "\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+    echo -e "\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
 fi
 
 if [ "$EXPECTED" == "FALSE" ]; then
@@ -64,9 +67,9 @@ else
     EXPECTED="FALSE"
     RESULT=$(bin/kmod_loaded)
     if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\t\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
     else
-        echo -e "\t\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
     fi
 fi;
 
@@ -74,7 +77,7 @@ fi;
 
 modprobe batman_adv
 
-if [ ! $(grep -o "^batman_adv" /proc/modules) == "batman_adv" ]; then
+if [ -z $(grep -o "^batman_adv" /proc/modules) ]; then
     echo "Inserting kernel module failed. Aborting..."
     exit
 else
@@ -82,9 +85,9 @@ else
         EXPECTED="TRUE"
         RESULT=$(bin/kmod_loaded)
         if [ "$EXPECTED" == "$RESULT" ]; then
-            echo -e "\t\t\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+            echo -e "\t\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
         else
-            echo -e "\t\t\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+            echo -e "\t\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
         fi
 fi;
 
@@ -103,9 +106,9 @@ else
     EXPECTED="NONE"
     RESULT=$(bin/kmod_version)
     if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
     else
-        echo -e "\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
     fi
 fi;
 
@@ -119,11 +122,15 @@ if [ ! $(grep -o "^batman_adv" /proc/modules) == "batman_adv" ]; then
 else
     echo -n "4.2 Test: When kmod loaded: "
     RESULT=$(bin/kmod_version)
-    EXPECTED=$(cat "/sys/module/batman_adv/version")
-    if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\t\tPASS\t\t$EXPECTED\t\t$RESULT"
+    if [ -f /sys/module/batman_adv/version ]; then
+        EXPECTED=$(cat "/sys/module/batman_adv/version")
     else
-        echo -e "\t\tFAIL\t\t$EXPECTED\t\t$RESULT"
+        EXPECTED="$FAIL: kmod missing"
+    fi
+    if [ "$EXPECTED" == "$RESULT" ]; then
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t$RESULT"
+    else
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t$RESULT"
     fi
 fi;
 
@@ -146,9 +153,9 @@ else
     RESULT=$(bin/debugfs_mounted)
     EXPECTED="FALSE"
     if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\t\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
     else
-        echo -e "\t\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
     fi
 fi
 
@@ -166,9 +173,9 @@ else
     RESULT="$(bin/debugfs_mounted)"
     EXPECTED="TRUE"
     if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\t\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
     else
-        echo -e "\t\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
     fi
 fi
 
@@ -191,9 +198,9 @@ else
     RESULT=$(bin/debugfs_path)
     EXPECTED="NONE"
     if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\t\tPASS\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
     else
-        echo -e "\t\tFAIL\t\t$EXPECTED\t\t\t$RESULT"
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
     fi
 fi
 
@@ -211,9 +218,9 @@ else
     RESULT=$(bin/debugfs_path)
     EXPECTED="$DEBUG_FS_PATH"
     if [ "$EXPECTED" == "$RESULT" ]; then
-        echo -e "\t\tPASS\t\t$(echo -n "$EXPECTED" | cut -c -20 )\t$(echo -n "$RESULT" | cut -c -20 )"
+        echo -e "\t\t$PASS\t\t$(echo -n "$EXPECTED" | cut -c -20 )\t$(echo -n "$RESULT" | cut -c -20 )"
     else
-        echo -e "\t\tFAIL\t\t$(echo -n "$EXPECTED" | cut -c -20 )\t$(echo -n "$RESULT" | cut -c -20 )"
+        echo -e "\t\t$FAIL\t\t$(echo -n "$EXPECTED" | cut -c -20 )\t$(echo -n "$RESULT" | cut -c -20 )"
     fi
 fi
 
