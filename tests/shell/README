@@ -1,0 +1,11 @@
+Shell script based unit tests
+-----------------------------
+
+The tests in this directory depend on a succesful make && make install for
+the library.
+
+Additionally some tests require root privileges and will prompt for the root
+password if not running as su or with sudo.
+
+Usage:
+Call "make && make test" in each directory.
