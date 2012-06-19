@@ -17,9 +17,13 @@
 
 package MeshAware.Exceptions is
 
-   Debug_FS_Error : exception;
-   Linux_Error : exception;
-   BATMAN_Adv_Module_Error : exception;
-   Network_Interface_Error : exception;
+   Debug_Filesystem_Not_Mounted    : exception;
+   ProcFS_File_Not_Found           : exception;
+   SysFS_File_Not_Found            : exception;
+   Kernel_Module_Not_Available     : exception;
+   Linux_Error                     : exception;
+   BATMAN_Adv_Module_Not_Loaded    : exception;
+   Network_Interface_Error         : exception;
+   Network_Interface_Not_Available : exception;
 
 end MeshAware.Exceptions;

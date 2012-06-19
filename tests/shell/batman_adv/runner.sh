@@ -225,3 +225,105 @@ else
 fi
 
 ########
+
+echo ""
+echo "7 Test group: Bat_Interface.Get_Interface & Bat_Interface.Available:"
+
+BATIF="cbat0"
+
+modprobe -r batman_adv
+if [ "$(grep -o "^batman_adv" /proc/modules)" == "batman_adv" ]; then
+    echo "Removing batman_adv failed. Aborting..."
+    exit
+fi
+
+modprobe batman_adv
+
+if [ ! $(grep -o "^batman_adv" /proc/modules) == "batman_adv" ]; then
+    echo "Inserting kernel module failed. Aborting..."
+    exit
+fi
+
+if [ -d "/sys/devices/virtual/net/$BATIF" ]; then
+    echo "Bat interface still available. Aborting..."
+    exit
+else
+    echo -n "7.1 Test: batif not available: "
+    RESULT=$(bin/get_batif_available $BATIF)
+    EXPECTED="FALSE"
+    if [ "$EXPECTED" == "$RESULT" ]; then
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
+    else
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
+    fi
+fi
+
+####
+
+batctl -m $BATIF if add eth0
+
+if [ ! -d "/sys/devices/virtual/net/$BATIF" ]; then
+    echo "Adding bat interface failed. Aborting..."
+    exit
+else
+    echo -n "7.2 Test: batif available: "
+    RESULT=$(bin/get_batif_available $BATIF)
+    EXPECTED="TRUE"
+    if [ "$EXPECTED" == "$RESULT" ]; then
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
+    else
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
+    fi
+fi
+
+########
+
+echo ""
+echo "8 Test group: Bat_Interface.Name"
+
+BATIF="cbat1"
+
+modprobe -r batman_adv
+if [ "$(grep -o "^batman_adv" /proc/modules)" == "batman_adv" ]; then
+    echo "Removing batman_adv failed. Aborting..."
+    exit
+fi
+
+modprobe batman_adv
+
+if [ ! $(grep -o "^batman_adv" /proc/modules) == "batman_adv" ]; then
+    echo "Inserting kernel module failed. Aborting..."
+    exit
+fi
+
+if [ -d "/sys/devices/virtual/net/$BATIF" ]; then
+    echo "Bat interface still available. Aborting..."
+    exit
+else
+    echo -n "8.1 Test: batif not available: "
+    RESULT=$(bin/batif_name $BATIF)
+    EXPECTED="NONE"
+    if [ "$EXPECTED" == "$RESULT" ]; then
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
+    else
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
+    fi
+fi
+
+####
+
+batctl -m $BATIF if add eth0
+
+if [ ! -d "/sys/devices/virtual/net/$BATIF" ]; then
+    echo "Adding bat interface failed. Aborting..."
+    exit
+else
+    echo -n "8.2 Test: batif available: "
+    RESULT=$(bin/batif_name $BATIF)
+    EXPECTED="$BATIF"
+    if [ "$EXPECTED" == "$RESULT" ]; then
+        echo -e "\t\t$PASS\t\t$EXPECTED\t\t\t$RESULT"
+    else
+        echo -e "\t\t$FAIL\t\t$EXPECTED\t\t\t$RESULT"
+    fi
+fi

@@ -17,7 +17,13 @@
 
 package MeshAware.Interfaces is
 
+   -------------------------
+   --  Network_Interface  --
+   -------------------------
+
    type Network_Interface is interface;
+
+   function Get_Interface (Name : String) return Network_Interface is abstract;
 
    function Available (Interface_Object : in Network_Interface)
                       return Boolean is abstract;
@@ -27,5 +33,17 @@ package MeshAware.Interfaces is
 
    function Name (Interface_Object : in Network_Interface)
                  return String is abstract;
+
+   --  TODO: return MAC_Address from MA.Addresses not string
+   function HW_Address (Interface_Object : in Network_Interface)
+                        return String is abstract;
+
+
+   type Physical_Interface (Name_Length : Positive) is
+     abstract new Network_Interface with record
+        IF_Name : String (1 .. Name_Length);
+   end record;
+
+   type Physical_Interface_Access is access Physical_Interface;
 
 end MeshAware.Interfaces;

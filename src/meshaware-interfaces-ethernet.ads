@@ -15,28 +15,27 @@
 --  You should have received a copy of the GNU Lesser General Public License
 --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package MeshAware.Addresses is
-   type Network_Address is interface;
+package MeshAware.Interfaces.Ethernet is
 
-   --  function Get_Address_String (Address_Object : in Network_Address)
-   --                              return String is abstract;
+   ----------------------
+   --  Ethernet_Interface  --
+   ----------------------
 
-   type Hostname is private;
+   type Ethernet_Interface (Name_Length : Positive) is
+     new Physical_Interface (Name_Length => Name_Length) with null record;
 
-   type Network_Address_Type is (IPv4, IPv6, MAC);
+   function Get_Interface (Name : String) return Ethernet_Interface;
 
-   type MAC_Address_Type is (Ethernet,
-                             Wireless_802_11,
-                             Bluetooth);
+   function Available (Interface_Object : in Ethernet_Interface)
+                      return Boolean;
 
-   type MAC_Address is new Network_Address with record
-      Address_Type : MAC_Address_Type;
-      Address : String (1 .. 12);  --  TODO: don't store as string
-   end record;
+   function Up (Interface_Object : in Ethernet_Interface)
+               return Boolean;
 
-   --  type IPv4_Address is new Network_Address with record
-   --  type IPv6_Address is new Network_Address with record
+   function Name (Interface_Object : in Ethernet_Interface)
+                 return String;
 
-private
-   type Hostname is null record;
-end MeshAware.Addresses;
+   function HW_Address (Interface_Object : in Ethernet_Interface)
+                       return String;
+
+end MeshAware.Interfaces.Ethernet;

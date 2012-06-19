@@ -1,9 +1,9 @@
 with Ada.Text_IO;
-with MeshAware.BATMAN_Advanced;
+with MeshAware.Linux;
 
 procedure kernel_version is
 begin
-   Ada.Text_IO.Put(MeshAware.BATMAN_Advanced.Kernel_Version);
+   Ada.Text_IO.Put(MeshAware.Linux.Kernel_Version);
 exception
    when others =>
       Ada.Text_IO.Put("NONE");

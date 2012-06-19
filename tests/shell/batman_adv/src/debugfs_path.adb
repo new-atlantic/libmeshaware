@@ -1,9 +1,9 @@
 with Ada.Text_IO;
-with MeshAware.BATMAN_Advanced;
+with MeshAware.Linux;
 
 procedure debugfs_path is
 begin
-   Ada.Text_IO.Put(MeshAware.BATMAN_Advanced.Debug_FS_Path);
+   Ada.Text_IO.Put(MeshAware.Linux.Debug_Filesystem_Path);
 exception
    when others =>
       Ada.Text_IO.Put("NONE");

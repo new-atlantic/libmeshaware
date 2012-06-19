@@ -15,27 +15,47 @@
 --  You should have received a copy of the GNU Lesser General Public License
 --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with MeshAware.Nodes; use MeshAware.Nodes;
+
 package MeshAware.Networks is
 
-   type Context_Type is (Bluetooth,
-                         Local_Area_Network,
-                         Internet,
-                         MANET_Network);
+   ---------------
+   --  Network  --
+   ---------------
 
-   type Routing_Type is (Managed,
-                         Mesh,
-                         Bluetooth);
+   type Network is limited interface;
 
-   type Routing_Protocol is (BATMAN_Advanced,
-                             olsrd,
-                             Babel,
-                             Ethernet,
-                             Bluetooth);
+   function Available (Mesh_Object : in Network) return Boolean is abstract;
 
-   type Network is record
-      Context : Context_Type;
-      Routing : Routing_Type;
-      Protocol : Routing_Protocol;
-   end record;
+   function Number_Of_Nodes (Mesh_Object : in Network)
+                            return Node_Count is abstract;
+
+   --  function Number_Of_Nodes (Mesh_Object : in Mesh)
+   --                           return Node_Count is abstract;
+
+   --  function Number_Of_Next_Hops (Mesh_Object : in Mesh)
+   --                               return Node_Count is abstract;
+
+   --  function Get_Own_Node return Node is abstract;
+
+   --  function Get_Node_By_Address (Mesh_Object : in Mesh;
+   --                                Address : Network_Address'Class)
+   --                               return Node is abstract;
+
+   --  function Get_Node_By_Address (Mesh_Object : in Mesh;
+   --                                Address_Type : in Network_Address_Type;
+   --                                Address : in String)
+   --                               return Node is abstract;
+
+   --  procedure Start_Gathering_Statistics (Mesh_Object : in Mesh)
+   --                                       is abstract;
+
+   --  procedure Stop_Gathering_Statistics (Mesh_Object : in Mesh) is abstract;
+
+   ------------
+   --  Mesh  --
+   ------------
+
+   type Mesh is abstract new Network with null record;
 
 end MeshAware.Networks;

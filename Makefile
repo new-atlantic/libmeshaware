@@ -49,4 +49,4 @@ clean:
 	if [ -d lib/ ]; then rm -r lib/; fi
 	if [ -d obj-shared/ ]; then rm -r obj-shared/; fi
 	if [ -d obj-static/ ]; then rm -r obj-static/; fi
-	if [ -d doc/ ]; then rm -r doc/; fi
+	if [ -d doc/html/ ]; then rm -r doc/html/; fi

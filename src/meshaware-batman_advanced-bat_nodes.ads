@@ -15,28 +15,23 @@
 --  You should have received a copy of the GNU Lesser General Public License
 --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package MeshAware.Addresses is
-   type Network_Address is interface;
+with MeshAware.Addresses;
+with MeshAware.BATMAN_Advanced.Bat_Meshes;
+with MeshAware.Nodes;
 
-   --  function Get_Address_String (Address_Object : in Network_Address)
-   --                              return String is abstract;
+use MeshAware.Addresses;
+use  MeshAware.BATMAN_Advanced.Bat_Meshes;
+use MeshAware.Nodes;
 
-   type Hostname is private;
+package MeshAware.BATMAN_Advanced.Bat_Nodes is
 
-   type Network_Address_Type is (IPv4, IPv6, MAC);
-
-   type MAC_Address_Type is (Ethernet,
-                             Wireless_802_11,
-                             Bluetooth);
-
-   type MAC_Address is new Network_Address with record
-      Address_Type : MAC_Address_Type;
-      Address : String (1 .. 12);  --  TODO: don't store as string
+   type Bat_Node is new Node with record
+      Bat_Address : MAC_Address;
+      Mesh_Object : not null access Bat_Mesh;
    end record;
 
-   --  type IPv4_Address is new Network_Address with record
-   --  type IPv6_Address is new Network_Address with record
+   overriding function Address (Node_Object : in Bat_Node;
+                                Address_Type : in Network_Address_Type)
+                               return Network_Address'Class;
 
-private
-   type Hostname is null record;
-end MeshAware.Addresses;
+end MeshAware.BATMAN_Advanced.Bat_Nodes;

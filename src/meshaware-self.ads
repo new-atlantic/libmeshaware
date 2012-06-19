@@ -15,12 +15,6 @@
 --  You should have received a copy of the GNU Lesser General Public License
 --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package MeshAware.BATMAN_Advanced is
+package MeshAware.Self is
 
-   function Kernel_Module_Available return Boolean;
-
-   function Kernel_Module_Loaded return Boolean;
-
-   function Kernel_Module_Version return String;
-
-end MeshAware.BATMAN_Advanced;
+end MeshAware.Self;

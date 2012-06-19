@@ -14,9 +14,9 @@ Initially libmeshaware only supports the 'B.A.T.M.A.N. advanced' routing protoco
 
 2. License
 
-libmeshaware is free software; you can redistribute it and/or modify it under 
-the terms of the GNU Lesser General Public License as published by the Free 
-Software Foundation; either version 3 of the License, or (at your option) any 
+libmeshaware is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation; either version 3 of the License, or (at your option) any
 later version.
 
 You can find a copy of the license in the COPYING file or at

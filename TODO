@@ -29,3 +29,15 @@ B.A.T.M.A.N. Advanced
 *********************
 
 * Add multiple version support.
+
+Convenience Functions
+*********************
+
+* Get_First_Available_Mesh (True_Mesh : Boolean := True) return Mesh;
+* Get_Available_Meshes return array access Mesh'Class;
+* Get_First_Available_Mesh_Interface (mesh_type) return Interface;
+* Get_First_Available_Mesh_Interface return Interface;
+* Get_Available_Mesh_Interfaces return array access;
+* Get_First_Available_Physical_Interface (type) return Interface;
+* Get_First_Available_Physical_Interface return Interface;
+* Get_Available_Physical_Interfaces return array access;
