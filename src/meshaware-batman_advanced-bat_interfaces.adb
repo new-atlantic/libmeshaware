@@ -19,6 +19,7 @@ with Ada.Directories;
 with Ada.IO_Exceptions;
 with Ada.Text_IO;
 
+with MeshAware.Linux;      use MeshAware.Linux;
 with MeshAware.Exceptions; use MeshAware.Exceptions;
 
 package body MeshAware.BATMAN_Advanced.Bat_Interfaces is

@@ -17,8 +17,6 @@
 
 package MeshAware.Exceptions is
 
-   Debug_Filesystem_Not_Mounted    : exception;
-   ProcFS_File_Not_Found           : exception;
    SysFS_File_Not_Found            : exception;
    Kernel_Module_Not_Available     : exception;
    Linux_Error                     : exception;

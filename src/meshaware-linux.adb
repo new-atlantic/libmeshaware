@@ -19,8 +19,6 @@ with Ada.IO_Exceptions;
 with Ada.Strings.Fixed;
 with Ada.Text_IO;
 
-with MeshAware.Exceptions; use MeshAware.Exceptions;
-
 package body MeshAware.Linux is
 
    ----------------------------------------------------------------------------
@@ -98,7 +96,7 @@ package body MeshAware.Linux is
    begin
 
       if not Debug_Filesystem_Mounted then
-         raise Debug_Filesystem_Not_Mounted;
+         raise DebugFS_Not_Mounted;
       end if;
 
       Ada.Text_IO.Open (File => Mounts_File,
@@ -129,7 +127,7 @@ package body MeshAware.Linux is
       end loop;
 
       Ada.Text_IO.Close (File => Mounts_File);
-      raise Debug_Filesystem_Not_Mounted;
+      raise DebugFS_Not_Mounted;
 
    exception
       when Ada.IO_Exceptions.Name_Error =>
