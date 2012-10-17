@@ -12,3 +12,4 @@ lib/
 .directory
 doc/html/
 libmeshaware.so
+build/
