@@ -13,3 +13,4 @@ lib/
 doc/html/
 libmeshaware.so
 build/
+tmp/
