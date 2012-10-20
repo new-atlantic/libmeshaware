@@ -13,4 +13,5 @@ lib/
 doc/html/
 libmeshaware.so
 build/
+build-analyze/
 tmp/
