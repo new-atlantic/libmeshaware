@@ -22,4 +22,16 @@
 #ifndef MESHAWARE_H
 #define MESHAWARE_H 1
 
+typedef enum {
+   batman_adv,  /// B.A.T.M.A.N. advanced
+} ma_mesh_protocol;
+
+struct ma_mesh_network {
+   ma_mesh_protocol         protocol;
+   char                     *version;
+   struct ma_mesh_network   *next;
+};
+
+struct ma_mesh_network *ma_get_available_mesh_networks (void);
+
 #endif                          /* MESHAWARE_H */
